@@ -14,6 +14,8 @@ type Props<T> = {
     title: string;
     error?: string;
     complect?: T
+    editForm?: boolean,
+    btnLoading?: boolean;
 };
 
 export const ComplectForm: React.FC<Props<Complect>> = ({
@@ -21,7 +23,9 @@ export const ComplectForm: React.FC<Props<Complect>> = ({
     title,
     btnText,
     error,
-    complect
+    complect,
+    editForm,
+    btnLoading
 }) => {
 
     const navigate = useNavigate();
@@ -42,7 +46,7 @@ export const ComplectForm: React.FC<Props<Complect>> = ({
                             <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                                 <Form.Item
                                     {...restField}
-                                    name={[name, 'component']}
+                                    name={ editForm ? [name, 'component', 'name'] : [name, 'component']}
                                     rules={[{ required: true, message: 'Обязательное поле' }]}
                                 >
                                     <Select
@@ -72,7 +76,7 @@ export const ComplectForm: React.FC<Props<Complect>> = ({
                     )}
                 </Form.List>
                 <Space>
-                    <CustomButton htmlType="submit">
+                    <CustomButton htmlType="submit" loading={btnLoading}>
                         { btnText }
                     </CustomButton>
                     <CustomButton onClick={ () => navigate(-1)}>

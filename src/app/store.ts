@@ -1,6 +1,5 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import auth from '../features/auth/authSlice';
-// import orders from '../features/orders/ordersSlice';
 import components from '../features/components/componentsSlice';
 import complects from '../features/complects/complectsSlice';
 import buyOperations from '../features/buy-operations/buyOperationsSlice';
@@ -9,13 +8,10 @@ import sendOperations from '../features/send-operations/sendOperationsSlice';
 import calculatedComponents from '../features/calculated-components/calculatedComponentsSlice';
 import { api } from './services/api';
 import { listenerMiddleware } from '../middleware/auth';
-// import { apiWB } from './services/apiWB';
 
 export const store = configureStore({
   reducer: {
     [api.reducerPath]: api.reducer,
-    // [apiWB.reducerPath]: apiWB.reducer,
-    // orders,
     auth,
     components,
     complects,

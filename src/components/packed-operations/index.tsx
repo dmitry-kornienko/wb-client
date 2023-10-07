@@ -40,15 +40,6 @@ export const PackedOperations = () => {
 
     const goToaddPackedOperation = () => navigate(Paths.packedOperationAdd);
 
-    // const modificateData: PackedOperation[] = [];
-
-    // data?.forEach(item => {
-    //     modificateData.push({
-    //         ...item,
-    //         date: getDate(item.date)
-    //     })
-    // })
-
     return (
         <Card className={styles.tableTitle} title='Операции упаковки'>
             <CustomButton type="primary" onClick={goToaddPackedOperation} icon={<PlusCircleOutlined />}>

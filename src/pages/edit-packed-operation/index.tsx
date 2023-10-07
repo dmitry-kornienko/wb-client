@@ -58,6 +58,7 @@ export const EditPackedOperation = () => {
                 onFinish={ handleEditPackedOperation }
                 error={ error }
                 packedOperation={ data }
+                editForm={ true }
                 btnLoading={btnLoading}
             />
         </Row>

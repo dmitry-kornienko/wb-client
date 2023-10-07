@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
 import { Loader } from '../../components/loader';
@@ -117,7 +117,7 @@ export const BuyOperation = () => {
                         <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
                                 Назад
                         </CustomButton>
-                        {/* <Link to={`/buy-operation/edit/${data._id}`}>
+                        <Link to={`/buy-operation/edit/${data._id}`}>
                             <CustomButton
                                 shape='round'
                                 type='default'
@@ -125,7 +125,7 @@ export const BuyOperation = () => {
                             >
                                 Редактировать
                             </CustomButton>
-                        </Link> */}
+                        </Link>
                         <CustomButton
                             shape='round'
                             danger

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
 import { Loader } from '../../components/loader';

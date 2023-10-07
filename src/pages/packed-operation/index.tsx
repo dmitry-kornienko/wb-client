@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { useEditComponentMutation, useGetAllComponentsQuery } from '../../app/services/components';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
 import { Loader } from '../../components/loader';
@@ -11,7 +10,6 @@ import { ErrorMessage } from '../../components/error-message';
 import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useGetPackedOperationQuery, useRemovePackedOperationMutation } from '../../app/services/packed-operations';
-import { useEditComplectMutation, useGetAllComplectsQuery } from '../../app/services/complects';
 import styles from './index.module.css';
 import { getDate } from '../../utils/get-date-format';
 
@@ -19,11 +17,7 @@ export const PackedOperation = () => {
 
     const params = useParams<{id: string}>();
     const { data, isLoading } = useGetPackedOperationQuery(params.id || '');
-    const complects = useGetAllComplectsQuery();
-    const components = useGetAllComponentsQuery();
     const [ removePackedOperation ] = useRemovePackedOperationMutation();
-    const [editComponent] = useEditComponentMutation();
-    const [editComplect] = useEditComplectMutation();
 
     const user = useSelector(selectUser);
 
@@ -87,7 +81,7 @@ export const PackedOperation = () => {
                         <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
                             Назад
                         </CustomButton>
-                        {/* <Link to={`/packed-operation/edit/${data._id}`}>
+                        <Link to={`/packed-operation/edit/${data._id}`}>
                             <CustomButton
                                 shape='round'
                                 type='default'
@@ -95,7 +89,7 @@ export const PackedOperation = () => {
                             >
                                 Редактировать
                             </CustomButton>
-                        </Link> */}
+                        </Link>
                         <CustomButton
                             shape='round'
                             danger

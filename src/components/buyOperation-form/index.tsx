@@ -44,7 +44,7 @@ export const BuyOperationForm: React.FC<Props<BuyOperation>> = ({
                             <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
                                 <Form.Item
                                     {...restField}
-                                    name={[name, 'component']}
+                                    name={ editForm ? [name, 'component', 'name'] : [name, 'component']}
                                     rules={[{ required: true, message: 'Обязательное поле' }]}
                                 >
                                     <Select
@@ -71,15 +71,18 @@ export const BuyOperationForm: React.FC<Props<BuyOperation>> = ({
                                     <Input suffix='руб.' placeholder="Цена" type='number' />
                                 </Form.Item>
                                 {
-                                    editForm ? null : <MinusCircleOutlined disabled={editForm} onClick={() => remove(name)} />
-                                }   
+                                    editForm ? null : <MinusCircleOutlined onClick={() => remove(name)} />
+                                }
                             </Space>
                         ))}
-                        <Form.Item>
-                            <Button disabled={editForm} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                                Добавить компонент
-                            </Button>
-                        </Form.Item>
+                        {
+                            editForm ? null :
+                                <Form.Item>
+                                    <Button disabled={editForm} type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                        Добавить компонент
+                                    </Button>
+                                </Form.Item>
+                        }
                         </>
                     )}
                 </Form.List>

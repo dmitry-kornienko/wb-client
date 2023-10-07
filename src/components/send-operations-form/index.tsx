@@ -118,7 +118,7 @@ export const SendOperationForm: React.FC<Props<SendOperation>> = ({
                                 >
                                     <Form.Item
                                         {...restField}
-                                        name={[name, "complect"]}
+                                        name={ editForm ? [name, 'complect', 'article'] : [name, 'complect']}
                                         rules={[
                                             {
                                                 required: true,
@@ -126,7 +126,7 @@ export const SendOperationForm: React.FC<Props<SendOperation>> = ({
                                             },
                                         ]}
                                     >
-                                        <Select placeholder="Артикул комплекта">
+                                        <Select disabled={ editForm } placeholder="Артикул комплекта">
                                             {data?.map((complect) => (
                                                 <Select.Option
                                                     value={complect._id}
@@ -159,17 +159,20 @@ export const SendOperationForm: React.FC<Props<SendOperation>> = ({
                                     
                                 </Space>
                             ))}
-                            <Form.Item>
-                                <Button
-                                    disabled={editForm}
-                                    type="dashed"
-                                    onClick={() => add()}
-                                    block
-                                    icon={<PlusOutlined />}
-                                >
-                                    Добавить комплект
-                                </Button>
-                            </Form.Item>
+                            {
+                                editForm ? null :
+                                    <Form.Item>
+                                        <Button
+                                            disabled={editForm}
+                                            type="dashed"
+                                            onClick={() => add()}
+                                            block
+                                            icon={<PlusOutlined />}
+                                        >
+                                            Добавить комплект
+                                        </Button>
+                                </Form.Item>
+                            }
                         </>
                     )}
                 </Form.List>

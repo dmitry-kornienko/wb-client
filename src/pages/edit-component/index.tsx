@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom";
 import { useEditComponentMutation, useGetComponentQuery } from "../../app/services/components";
 import { Loader } from "../../components/loader";
 import { Row } from "antd";

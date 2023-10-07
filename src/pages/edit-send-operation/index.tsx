@@ -1,5 +1,5 @@
-import { Row } from 'antd'
-import { useEffect, useState } from 'react'
+import { Row } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
@@ -63,7 +63,8 @@ export const EditSendOperation = () => {
         <Row align='middle' justify='center'>
             <SendOperationForm
                 sendOperation={ data }
-                editForm title='Добавление поставки'
+                editForm={true}
+                title='Добавление поставки'
                 btnText='Сохранить'
                 onFinish={handleEditSendOperation}
                 error={error}

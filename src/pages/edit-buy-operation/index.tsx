@@ -1,5 +1,5 @@
-import { Row } from 'antd'
-import { useEffect, useState } from 'react'
+import { Row } from 'antd';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';

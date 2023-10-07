@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom";
 import { Loader } from "../../components/loader";
 import { Row } from "antd";
 import { Paths } from "../../paths";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
 import { useEditComplectMutation, useGetComplectQuery } from "../../app/services/complects";
-import { Complect, FullComplect } from "../../types";
+import { Complect } from "../../types";
 import { ComplectForm } from "../../components/complect-form";
 import { useGetAllComponentsQuery } from "../../app/services/components";
 
@@ -14,9 +14,10 @@ export const EditComplect = () => {
     const navigate= useNavigate();
     const params = useParams<{ id: string }>();
     const [error, setError] = useState('');
+    const [btnLoading, setBtnLoading] = useState(false);
     const { data, isLoading } = useGetComplectQuery(params.id || '');
-    const [editComplect] = useEditComplectMutation();
     const components = useGetAllComponentsQuery();
+    const [editComplect] = useEditComplectMutation();
 
     if (isLoading) {
         return <Loader />
@@ -24,6 +25,15 @@ export const EditComplect = () => {
 
     const handleEditComplect = async (complect: Complect) => {
         try {
+            setBtnLoading(true);
+
+            complect.composition.forEach(item => {
+                const currenComponent = components.data?.find(component => component._id === item.component.name);
+
+                if (currenComponent) {
+                    item.component = currenComponent
+                }
+            })
   
             const editedComplect = {
                 ...data,
@@ -34,15 +44,11 @@ export const EditComplect = () => {
             
             editedComplect.composition.forEach(item => {
                 item.count = Number(item.count);
-
-                // const currentComponent = components.data?.find(component => component.name === item.name);
-
-                // if (currentComponent) {
-                //     item.article = currentComponent.article
-                // }
             });
 
             await editComplect(editedComplect).unwrap();
+
+            setBtnLoading(false);
 
             navigate(`${Paths.status}/complectUpdated`);
         } catch (error) {
@@ -53,6 +59,8 @@ export const EditComplect = () => {
             } else {
                 setError('Неизвестная ошибка');
             }
+
+            setBtnLoading(false);
         }
     }
 
@@ -61,9 +69,11 @@ export const EditComplect = () => {
             <ComplectForm
                 title="Редактирование комплекта"
                 btnText="Сохранить"
-                onFinish={ handleEditComplect }
-                error={ error }
-                complect={ data }
+                onFinish={handleEditComplect}
+                error={error}
+                complect={data}
+                editForm={true}
+                btnLoading={btnLoading}
             />
         </Row>
     )

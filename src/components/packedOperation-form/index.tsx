@@ -13,6 +13,7 @@ type Props<T> = {
     title: string;
     error?: string;
     packedOperation?: T;
+    editForm?: boolean;
     btnLoading?: boolean;
 };
 
@@ -22,6 +23,7 @@ export const PackedOperationForm: React.FC<Props<PackedOperation>> = ({
     btnText,
     error,
     packedOperation,
+    editForm,
     btnLoading
 }) => {
 
@@ -33,14 +35,19 @@ export const PackedOperationForm: React.FC<Props<PackedOperation>> = ({
         <Card title={ title } style={{ width: '30rem', margin: '10px 0'}}>
             <Form name="packedOperation-form" onFinish={ onFinish } initialValues={ packedOperation }>
                 <CustomInput type="date" name="date" placeholder="Дата" />
-                <Space  style={{ marginBottom: '20px'}}>
-                    <Form.Item name='complect'>
-                        <Select placeholder='Артикул комплекта'>
-                            {
-                                data?.map(complect => ( <Select.Option value={ complect._id } key={ complect._id }>{complect.article}</Select.Option> ))
-                            }
-                        </Select>
-                    </Form.Item>
+                <Space align="baseline" style={{ marginBottom: '20px'}}>
+                    {
+                        editForm ?
+                            <Input disabled defaultValue={packedOperation?.complect.article} />
+                            :
+                            <Form.Item name='complect'>
+                                <Select placeholder='Артикул комплекта'>
+                                    {
+                                        data?.map(complect => ( <Select.Option value={ complect._id } key={ complect._id }>{complect.article}</Select.Option> ))
+                                    }
+                                </Select>
+                            </Form.Item>
+                    }
                     <Form.Item name='count'>
                         <Input suffix='шт.' placeholder="Кол-во" type='number' />
                     </Form.Item>

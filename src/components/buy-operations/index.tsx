@@ -9,7 +9,7 @@ import { useGetAllBuyOperationsQuery } from "../../app/services/buy-operations";
 import { getDate } from "../../utils/get-date-format";
 import styles from './index.module.css';
 
-const columns: ColumnsType<{ _id: string, date: string, composition: { component: Component, count: number }[]}> = [
+const columns: ColumnsType<{ _id: string, date: string, composition: { component: Component, count: number, price: number }[]}> = [
     {
         title: 'Дата',
         dataIndex: 'date',
@@ -35,7 +35,7 @@ const columns: ColumnsType<{ _id: string, date: string, composition: { component
     },
     {
         title: 'Сумма',
-        render: (_, record) => record.composition.reduce((sum, elem) => (sum + (elem.count * elem.component.price)), 0),
+        render: (_, record) => record.composition.reduce((sum, elem) => (sum + (elem.count * elem.price)), 0),
         key: 'sum',
         width: 100,
     },
