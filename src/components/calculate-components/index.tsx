@@ -3,11 +3,11 @@ import { useGetAllComplectsQuery } from "../../app/services/complects";
 import { Loader } from "../loader";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { CustomButton } from "../custom-button";
-import { useGetAllComponentsQuery } from "../../app/services/components";
 import { ColumnsType } from "antd/es/table";
 import { Component } from '../../types';
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { addCalculatedComponents, clearFormCalculated } from "../../features/calculated-components/calculatedComponentsSlice";
+import styles from './index.module.css';
 
 type FormData = {
     composition: {
@@ -45,7 +45,6 @@ const columns: ColumnsType<Component> = [
 
 export const CalculateComponents = () => {
     const { data, isLoading } = useGetAllComplectsQuery();
-    const components = useGetAllComponentsQuery();
 
     const dispatch = useAppDispatch();
     const calculatedComponents = useAppSelector(state => state.calculatedComponents.list);
@@ -54,35 +53,29 @@ export const CalculateComponents = () => {
         return <Loader />;
     }
 
-    const arrForTable: Component[] = []
+    const arrForTable: Component[] = [];
 
     const goToCount = (formData: FormData) => {
 
         if (formData.composition) {
             formData.composition.forEach(item => {
+
                 item.count = Number(item.count);
     
                 const complect = data?.find(complect => complect.article === item.article);
     
                 complect?.composition.forEach(compositionItem => {
-    
-                    // const component = components.data?.find(elem => elem.article === compositionItem.article);
-    
-                    // if (component) {
-                        
-                    //     const remaindCOunAfterPacked = component?.count - (item.count * compositionItem.count)
-    
-                    //     if (remaindCOunAfterPacked < 0) {
-    
-                    //         const isContainsInArr = arrForTable.find(pos => pos.article === component.article);
-    
-                    //         if (isContainsInArr) {
-                    //             isContainsInArr.count += compositionItem.count * item.count;
-                    //         } else {
-                    //             arrForTable.push({ ...component, count: Math.abs(remaindCOunAfterPacked) })
-                    //         }
-                    //     }
-                    // }
+
+                    const remaindCountAfterPacked = compositionItem.component.count - (item.count * compositionItem.count);
+
+                    if (remaindCountAfterPacked < 0) {
+                        const isContainsInArr = arrForTable.find(pos => pos.article === compositionItem.component.article);
+                        if (isContainsInArr) {
+                            isContainsInArr.count += compositionItem.component.count * item.count;
+                        } else {
+                            arrForTable.push({ ...compositionItem.component, count: Math.abs(remaindCountAfterPacked) });
+                        }
+                    }
                 })
             });
 
@@ -176,6 +169,14 @@ export const CalculateComponents = () => {
                 size="small"
                 pagination={false}
             />
+            {
+                calculatedComponents.length > 0 ?
+                    <div className={styles.reduce}>Ориентировочная сумма закупки: <span>
+                        {
+                            Math.abs(calculatedComponents.reduce((sum, elem) => (sum + (elem.count * elem.price)), 0))
+                        } руб.</span>
+                    </div> : null
+            }
         </Card>
     );
 };

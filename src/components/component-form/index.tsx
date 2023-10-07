@@ -4,6 +4,7 @@ import { CustomInput } from "../custom-input";
 import { ErrorMessage } from "../error-message";
 import { CustomButton } from "../custom-button";
 import { useNavigate } from "react-router-dom";
+import TextArea from 'antd/es/input/TextArea';
 
 type Props<T> = {
     onFinish: (values: T) => void;
@@ -30,7 +31,9 @@ export const ComponentForm: React.FC<Props<Component>> = ({
                 <CustomInput type="text" name="article" placeholder="Артикул" />
                 <CustomInput type="number" name="count" placeholder="Кол-во" />
                 <CustomInput type="number" name="price" placeholder="Цена" />
-                <CustomInput type="text" name="desc" placeholder="Описание" />
+                <Form.Item name='desc'>
+                    <TextArea placeholder="Описание" />
+                </Form.Item>
                 <Space>
                     <ErrorMessage message={ error } />
                     <CustomButton htmlType="submit">
