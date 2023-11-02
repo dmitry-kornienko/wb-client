@@ -5,6 +5,7 @@ import complects from '../features/complects/complectsSlice';
 import buyOperations from '../features/buy-operations/buyOperationsSlice';
 import packedOperations from '../features/packed-operations/packedOperationsSlice';
 import sendOperations from '../features/send-operations/sendOperationsSlice';
+import reports from '../features/reports/reportsSlice';
 import calculatedComponents from '../features/calculated-components/calculatedComponentsSlice';
 import { api } from './services/api';
 import { listenerMiddleware } from '../middleware/auth';
@@ -18,6 +19,7 @@ export const store = configureStore({
     buyOperations,
     packedOperations,
     sendOperations,
+    reports,
     calculatedComponents
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(api.middleware).prepend(listenerMiddleware.middleware)

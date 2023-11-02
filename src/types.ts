@@ -136,3 +136,21 @@ export type SendOperationCompositionItem = {
     sendOperationId: string;
     complectId: string;
 }
+
+export type Report = {
+    _id: string,
+    realizationreport_id: number,
+    date_from: string, 
+    date_to: string,
+    retail_amount: number, // оборот
+    ppvz_for_pay: number, // к перечислению за товар
+    delivery_rub: number, 
+    penalty: number,
+    storage_cost: number, // хранение
+    other_deductions: number,
+    composition: {
+        article: string,
+        count: number,
+        return_count: number
+    }[]
+}
