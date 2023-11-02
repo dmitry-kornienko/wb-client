@@ -5,6 +5,7 @@ import { Home } from './pages/home'
 import { Buy } from './pages/buy'
 import { Packed } from './pages/packed'
 import { Send } from './pages/send'
+import { ReportPage } from './pages/report'
 import { Login } from './pages/login'
 import { Register } from './pages/register'
 import { AddComponent } from './pages/add-component'
@@ -23,6 +24,7 @@ import { EditPackedOperation } from './pages/edit-packed-operation'
 import { SendOperation } from './pages/send-operation'
 import { AddSendOperation } from './pages/add-send-operation'
 import { EditSendOperation } from './pages/edit-send-operation'
+import { AddReport } from './pages/add-report'
 
 export const App = () => {
   return (
@@ -32,6 +34,7 @@ export const App = () => {
             <Route path={ Paths.buy } element={ <Buy /> } />
             <Route path={ Paths.packed } element={ <Packed /> } />
             <Route path={ Paths.send } element={ <Send /> } />
+            <Route path={ Paths.report } element={ <ReportPage /> } />
             <Route path={ Paths.login } element={ <Login /> } />
             <Route path={ Paths.register } element={ <Register /> } />
 
@@ -56,6 +59,11 @@ export const App = () => {
             <Route path={ Paths.sendOperationAdd } element={ <AddSendOperation /> } />
             <Route path={ `${Paths.sendOperationEdit}/:id` } element={ <EditSendOperation /> } />
             <Route path={ `${Paths.sendOperation}/:id` } element={ <SendOperation /> } />
+
+
+            <Route path={ Paths.reportAdd } element={ <AddReport /> } />
+            {/* <Route path={ `${Paths.reportEdit}/:id` } element={ <EditReport /> } /> */}
+            {/* <Route path={ `${Paths.report}/:id` } element={ <Report /> } /> */}
 
         </Routes>
     </Layout>

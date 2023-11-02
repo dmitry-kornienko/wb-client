@@ -6,6 +6,7 @@ export const Paths = {
     register: "/register",
     login: "/login",
     statistic: "/statistic",
+    report: "/report",
 
     componentAdd: "/component/add",
     componentRemove: "/component/remove",
@@ -31,6 +32,10 @@ export const Paths = {
     sendOperationRemove: "/send-operation/remove",
     sendOperationEdit: "/send-operation/edit",
     sendOperation: "/send-operation",
+    
+    reportAdd: "/report/add",
+    reportRemove: "/report/remove",
+    reportEdit: "/report/edit",
 
     status: "/status",
 } as const;

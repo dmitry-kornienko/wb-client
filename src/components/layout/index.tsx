@@ -4,7 +4,7 @@ import styles from '../layout/index.module.css';
 import { Header } from '../header';
 import Sider from 'antd/es/layout/Sider';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DropboxOutlined, HomeOutlined, ZoomInOutlined, SendOutlined } from '@ant-design/icons';
+import { DropboxOutlined, HomeOutlined, ZoomInOutlined, SendOutlined, DollarOutlined } from '@ant-design/icons';
 
 type Props = {
     children: React.ReactNode 
@@ -38,11 +38,11 @@ export const Layout: React.FC<Props> = ({ children }) => {
       //   icon: <LineChartOutlined />,
       //   key: 'statistic'
       // },
-      // {
-      //   lable: 'Финансы',
-      //   icon: <DollarOutlined />,
-      //   key: 'finance'
-      // },
+      {
+        lable: 'Отчеты',
+        icon: <DollarOutlined />,
+        key: 'report'
+      },
     ]
     const { pathname } = useLocation();
 
