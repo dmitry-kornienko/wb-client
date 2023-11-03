@@ -25,6 +25,9 @@ import { SendOperation } from './pages/send-operation'
 import { AddSendOperation } from './pages/add-send-operation'
 import { EditSendOperation } from './pages/edit-send-operation'
 import { AddReport } from './pages/add-report'
+import { ReportOne } from './pages/report-one'
+import { EditReport } from './pages/edit-report'
+import { EditToken } from './pages/edit-token'
 
 export const App = () => {
   return (
@@ -62,8 +65,10 @@ export const App = () => {
 
 
             <Route path={ Paths.reportAdd } element={ <AddReport /> } />
-            {/* <Route path={ `${Paths.reportEdit}/:id` } element={ <EditReport /> } /> */}
-            {/* <Route path={ `${Paths.report}/:id` } element={ <Report /> } /> */}
+            <Route path={ `${Paths.reportEdit}/:id` } element={ <EditReport /> } />
+            <Route path={ `${Paths.report}/:id` } element={ <ReportOne /> } />
+
+            <Route path={ Paths.editToken } element={ <EditToken /> } />
 
         </Routes>
     </Layout>

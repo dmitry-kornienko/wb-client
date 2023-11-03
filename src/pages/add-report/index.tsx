@@ -32,8 +32,14 @@ export const AddReport = () => {
         
         try {
             setBtnLoading(true);
-            config.tokenWB = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3NJRCI6ImUxNmQ4ODU0LThlOGQtNDk3Ni04ZmUwLThmNzU3NGZmYTU3OSJ9.NcHNBz1KT6y48moGIDD1Bt_ggbOFL17tzYofetA33rI'
-            await addReport(config).unwrap();
+            const tokenWB = localStorage.getItem('tokenWB');
+
+            if (tokenWB) {
+                config.tokenWB = tokenWB;
+                await addReport(config).unwrap();
+            } else {
+                throw new Error('Неактуальный токен Wildberries');
+            }
 
             setBtnLoading(false);
 

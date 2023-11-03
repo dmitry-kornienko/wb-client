@@ -32,15 +32,15 @@ const columns: ColumnsType<Report> = [
         key: "retail_amount",
     },
     {
+        title: "Себестоимость",
+        dataIndex: "cost_price",
+        key: "cost_price",
+    },
+    {
         title: "Логистика",
         dataIndex: "delivery_rub",
         render: (_, record) => <div>{record.delivery_rub.toFixed(2)}</div>,
         key: "delivery_rub",
-    },
-    {
-        title: "Штрафы",
-        dataIndex: "penalty",
-        key: "penalty",
     },
     {
         title: "Хранение",
@@ -53,7 +53,12 @@ const columns: ColumnsType<Report> = [
         key: "other_deductions",
     },
     {
-        title: "Доход",
+        title: "Штрафы",
+        dataIndex: "penalty",
+        key: "penalty",
+    },
+    {
+        title: "К оплате",
         render: (_, record) => (
             <div>
                 {(record.ppvz_for_pay -
@@ -63,7 +68,49 @@ const columns: ColumnsType<Report> = [
                     record.storage_cost).toFixed(2)}
             </div>
         ),
-        key: "other_deductions",
+    },
+    {
+        title: "Доход",
+        render: (_, record) => (
+            <div className={
+                record.ppvz_for_pay -
+                record.cost_price -
+                record.retail_amount*0.07 -
+                record.delivery_rub -
+                record.penalty -
+                record.other_deductions -
+                record.storage_cost < 0 ?
+                styles.bad : ''
+            }>
+                {(record.ppvz_for_pay -
+                record.cost_price -
+                record.retail_amount*0.07 -
+                record.delivery_rub -
+                record.penalty -
+                record.other_deductions -
+                record.storage_cost).toFixed(2)}
+            </div>
+        ),
+    },
+    {
+        title: "Марж-ть",
+        render: (_, record) => (
+            <div>
+                {`${(((record.ppvz_for_pay -
+                    record.cost_price -
+                    record.retail_amount*0.07 -
+                    record.delivery_rub -
+                    record.penalty -
+                    record.other_deductions -
+                    record.storage_cost)
+                    /
+                    (record.ppvz_for_pay -
+                    record.delivery_rub -
+                    record.penalty -
+                    record.other_deductions -
+                    record.storage_cost))*100).toFixed(2)} %`}
+            </div>
+        ),
     },
 ];
 
@@ -76,13 +123,13 @@ export const Reports = () => {
 
     return (
         <Card className={styles.tableTitle} title="Отчеты">
-            <CustomButton
-                type="primary"
-                onClick={goToAddReport}
-                icon={<PlusCircleOutlined />}
-            >
-                Добавить
-            </CustomButton>
+                <CustomButton
+                    type="primary"
+                    onClick={goToAddReport}
+                    icon={<PlusCircleOutlined />}
+                >
+                    Добавить
+                </CustomButton>
             <Table
                 loading={isLoading}
                 dataSource={data}

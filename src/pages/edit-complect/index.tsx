@@ -34,12 +34,13 @@ export const EditComplect = () => {
                     item.component = currenComponent
                 }
             })
-  
+            
             const editedComplect = {
                 ...data,
                 ...complect
             };
-
+            
+            editedComplect.costPrice = Number(editedComplect.costPrice)
             editedComplect.count = Number(editedComplect.count);
             
             editedComplect.composition.forEach(item => {

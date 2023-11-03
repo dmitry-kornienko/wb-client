@@ -1,6 +1,6 @@
 import { Layout, Space, Typography } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
-import { TeamOutlined, UserOutlined, LoginOutlined, LogoutOutlined } from '@ant-design/icons';
+import { TeamOutlined, UserOutlined, LoginOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons';
 import styles from '../header/index.module.css';
 import { CustomButton } from '../custom-button';
 import { Paths } from '../../paths';
@@ -35,11 +35,14 @@ export const Header = () => {
                     <div>
                         <Typography>{user.firstName} {user.lastName}</Typography>
                     </div>
-                    <div>
+                    <Space>
+                        <CustomButton type='dashed' icon={ <SettingOutlined /> } onClick={ () => navigate(Paths.editToken) }>
+                            токен WB
+                        </CustomButton>
                         <CustomButton type='text' icon={ <LogoutOutlined /> } onClick={ onLogoutClick }>
                             Выйти
                         </CustomButton>
-                    </div>
+                    </Space>
                 </>
             ) :
             <Space>

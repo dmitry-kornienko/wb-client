@@ -3,22 +3,23 @@ import { CustomInput } from "../custom-input";
 import { ErrorMessage } from "../error-message";
 import { CustomButton } from "../custom-button";
 import { useNavigate } from "react-router-dom";
+import { Report } from "../../types";
 
 type Props<T> = {
     onFinish: (values: T) => void;
     btnText: string;
     title: string;
     error?: string;
-    report?: T;
+    data?: T;
     btnLoading?: boolean;
 }
 
-export const ReportForm: React.FC<Props<{ dateFrom: string, dateTo: string, tokenWB: string }>> = ({
+export const EditReportForm: React.FC<Props<Report>> = ({
     onFinish,
     title,
     btnText,
     error,
-    report,
+    data,
     btnLoading
 }) => {
 
@@ -26,11 +27,11 @@ export const ReportForm: React.FC<Props<{ dateFrom: string, dateTo: string, toke
 
     return (
         <Card title={ title } style={{ width: '30rem', margin: '10px 0'}}>
-            <Form name="component-form" onFinish={ onFinish } initialValues={ report }>
-                <label>Дата начала</label>
-                <CustomInput type="date" name="dateFrom" placeholder="Дата начала" />
-                <label>Дата конца</label>
-                <CustomInput type="date" name="dateTo" placeholder="Дата конца" />
+            <Form name="component-form" onFinish={ onFinish } initialValues={ data }>
+                <label>Стоимость хранения</label>
+                <CustomInput type="number" name="storage_cost" placeholder="Стоимость хранения" />
+                <label>Прочие удержания</label>
+                <CustomInput type="number" name="other_deductions" placeholder="Прочие удержания" />
                 <Space>
                     <ErrorMessage message={ error } />
                     <CustomButton htmlType="submit" loading={btnLoading}>

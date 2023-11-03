@@ -19,7 +19,7 @@ const columns: ColumnsType<Complect> = [
         title: 'Артикул',
         dataIndex: 'article',
         key: 'article',
-        width: 120
+        width: 180
     },
     {
         title: 'Кол-во',

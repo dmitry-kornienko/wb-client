@@ -132,6 +132,9 @@ export const Complect = () => {
             <Descriptions.Item label='Себестоимость' span={ 3 }>
                 { `${getComplectCost(data)} руб.` }
             </Descriptions.Item>
+            <Descriptions.Item label='Цена закупки' span={ 3 }>
+                { `${data.costPrice} руб.` }
+            </Descriptions.Item>
         </Descriptions>
         {
             user ? (

@@ -38,6 +38,12 @@ export const ComplectForm: React.FC<Props<Complect>> = ({
                 <CustomInput type="text" name="name" placeholder="Название" />
                 <CustomInput type="text" name="article" placeholder="Артикул" />
                 <CustomInput type="number" name="count" placeholder="Кол-во" />
+                {
+                    editForm ? 
+                        <CustomInput type="number" name="costPrice" placeholder="Цена закупки" />
+                        :
+                        null
+                }
                 <Typography.Title level={ 4 }>Состав:</Typography.Title>
                 <Form.List name="composition">
                     {(fields, { add, remove }) => (

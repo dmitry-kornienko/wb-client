@@ -8,6 +8,8 @@ export const Paths = {
     statistic: "/statistic",
     report: "/report",
 
+    editToken: "/token/edit",
+
     componentAdd: "/component/add",
     componentRemove: "/component/remove",
     componentEdit: "/component/edit",

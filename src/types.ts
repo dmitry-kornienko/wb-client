@@ -69,6 +69,7 @@ export type Complect = {
     name: string;
     article: string;
     count: number;
+    costPrice: number;
     composition: {
         component: Component,
         count: number
@@ -144,6 +145,7 @@ export type Report = {
     date_to: string,
     retail_amount: number, // оборот
     ppvz_for_pay: number, // к перечислению за товар
+    cost_price: number, // к перечислению за товар
     delivery_rub: number, 
     penalty: number,
     storage_cost: number, // хранение
@@ -151,6 +153,8 @@ export type Report = {
     composition: {
         article: string,
         count: number,
-        return_count: number
+        return_count: number,
+        cost_price_of_one: number,
+        ppvz_for_pay_for_article: number
     }[]
 }

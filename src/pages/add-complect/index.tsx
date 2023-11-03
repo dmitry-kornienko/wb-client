@@ -26,6 +26,7 @@ export const AddComplect = () => {
         
         try {
             complect.count = Number(complect.count);
+            complect.costPrice = Number(complect.costPrice)
 
             complect.composition.forEach(item => {
                 item.count = Number(item.count);

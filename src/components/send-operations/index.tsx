@@ -29,7 +29,7 @@ const columns: ColumnsType<SendOperation> = [
         render: (_, record) => record.composition.map(item => (
             <div>{item.complect.article} - {item.count} шт.</div>
         )),
-        width: 160
+        width: 230
     },
     {
         title: 'Кол-во коробов',
