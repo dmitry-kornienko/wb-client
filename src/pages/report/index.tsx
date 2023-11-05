@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
 import { Modal } from "antd";
 import { Paths } from "../../paths";
+import { ReportsOfMonth } from "../../components/reports-of-month";
 
 export const ReportPage = () => {
     const navigate = useNavigate();
@@ -28,6 +29,7 @@ export const ReportPage = () => {
     return (
         <div>
             <Reports />
+            <ReportsOfMonth />
             <Modal
                 title="Доступ закрыт"
                 open={isModalOpen}
