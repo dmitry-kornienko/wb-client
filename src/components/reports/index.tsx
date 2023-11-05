@@ -9,6 +9,7 @@ import styles from "./index.module.css";
 import { ColumnsType } from "antd/es/table";
 import { Report } from "../../types";
 import { getDate } from "../../utils/get-date-format";
+import { addSpacesToNumberWithDecimal } from "../../utils/add-spaces-to-number";
 
 const columns: ColumnsType<Report> = [
     {
@@ -31,44 +32,48 @@ const columns: ColumnsType<Report> = [
     {
         title: "Оборот",
         dataIndex: "retail_amount",
-        render: (_, record) => <div>{record.retail_amount.toFixed(2)}</div>,
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.retail_amount)}</div>,
         key: "retail_amount",
     },
     {
         title: "Себестоимость",
         dataIndex: "cost_price",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.cost_price)}</div>,
         key: "cost_price",
     },
     {
         title: "Логистика",
         dataIndex: "delivery_rub",
-        render: (_, record) => <div>{record.delivery_rub.toFixed(2)}</div>,
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.delivery_rub)}</div>,
         key: "delivery_rub",
     },
     {
         title: "Хранение",
         dataIndex: "storage_cost",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.storage_cost)}</div>,
         key: "storage_cost",
     },
     {
         title: "Удержания",
         dataIndex: "other_deductions",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.other_deductions)}</div>,
         key: "other_deductions",
     },
     {
         title: "Штрафы",
         dataIndex: "penalty",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.penalty)}</div>,
         key: "penalty",
     },
     {
         title: "К оплате",
         render: (_, record) => (
             <div>
-                {(record.ppvz_for_pay -
+                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
                     record.delivery_rub -
                     record.penalty -
                     record.other_deductions -
-                    record.storage_cost).toFixed(2)}
+                    record.storage_cost)}
             </div>
         ),
     },
@@ -85,13 +90,13 @@ const columns: ColumnsType<Report> = [
                 record.storage_cost < 0 ?
                 styles.bad : ''
             }>
-                {(record.ppvz_for_pay -
+                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
                 record.cost_price -
                 record.retail_amount*0.07 -
                 record.delivery_rub -
                 record.penalty -
                 record.other_deductions -
-                record.storage_cost).toFixed(2)}
+                record.storage_cost)}
             </div>
         ),
     },
