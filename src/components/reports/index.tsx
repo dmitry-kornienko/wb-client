@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { useGetAllReportsQuery } from "../../app/services/reports";
 import { Paths } from "../../paths";
 import { PlusCircleOutlined } from "@ant-design/icons";
-import styles from "./index.module.css";
 import { ColumnsType } from "antd/es/table";
 import { Report } from "../../types";
 import { getDate } from "../../utils/get-date-format";
 import { addSpacesToNumberWithDecimal } from "../../utils/add-spaces-to-number";
+import styles from "./index.module.css";
 
 const columns: ColumnsType<Report> = [
     {
@@ -130,7 +130,7 @@ export const Reports = () => {
     const goToAddReport = () => navigate(Paths.reportAdd);
 
     return (
-        <Card className={styles.tableTitle} title="Отчеты">
+        <Card className={styles.tableTitle} title="Еженедельные отчеты">
                 <CustomButton
                     type="primary"
                     onClick={goToAddReport}
@@ -142,7 +142,6 @@ export const Reports = () => {
                 loading={isLoading}
                 dataSource={data}
                 size="small"
-                // scroll={{ x: 1300 }}
                 columns={columns}
                 rowKey={(report) => report._id}
                 onRow={(report) => {
