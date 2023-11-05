@@ -1,4 +1,6 @@
-import { Row } from 'antd'
+import { Card, DatePicker, DatePickerProps, Form, Space } from 'antd'
+import { CustomButton } from '../../components/custom-button';
+import { ErrorMessage } from '../../components/error-message';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -6,18 +8,22 @@ import { selectUser } from '../../features/auth/authSlice';
 import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddReportMutation } from '../../app/services/reports';
-import { ReportForm } from '../../components/report-form';
+import type { RangePickerProps } from 'antd/es/date-picker';
 
-type Config = {
-    dateFrom: string,
-    dateTo: string,
-    tokenWB: string
-}
+import dayjs from "dayjs";
+// import "dayjs/locale/ru";
+// import updateLocale from "dayjs/plugin/updateLocale";
+
+// dayjs.extend(updateLocale);
+// dayjs.updateLocale("ru", {
+//   weekStart: 1
+// });
 
 export const AddReport = () => {
-
+    
     const [error, setError] = useState('');
     const [btnLoading, setBtnLoading] = useState(false);
+    const [selectedWeek, setSelectedWeek] = useState('');
     const navigate= useNavigate();
     const user = useSelector(selectUser);
     const [addReport] = useAddReportMutation();
@@ -27,16 +33,33 @@ export const AddReport = () => {
             navigate('/login')
         }
     }, [navigate, user]);
+    
+    const customWeekStartEndFormat: DatePickerProps['format'] = (value) => {
+        const startDate = dayjs(value).startOf('week').add(1, 'day');
+        const endDate = dayjs(value).endOf('week').add(1, 'day');
 
-    const handleAddReport = async (config: Config) => {
-        
+        return `${startDate.format('YYYY-MM-DD')} ~ ${endDate.format('YYYY-MM-DD')}`;
+    };
+
+    const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+        return current && current > dayjs().endOf('day').subtract(1, 'week');
+    };
+
+    const handleDateChange = (date: any, dateString: string) => {
+        console.log(date)
+        setSelectedWeek(dateString);
+    };
+
+    const handleAddReport = async () => {
         try {
             setBtnLoading(true);
+
+            const dateFrom = selectedWeek.slice(0, 10);
+            const dateTo = selectedWeek.slice(13);
             const tokenWB = localStorage.getItem('tokenWB');
 
             if (tokenWB) {
-                config.tokenWB = tokenWB;
-                await addReport(config).unwrap();
+                await addReport({dateFrom, dateTo, tokenWB}).unwrap();
             } else {
                 throw new Error('Неактуальный токен Wildberries');
             }
@@ -58,8 +81,27 @@ export const AddReport = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <ReportForm title='Запрос нового отчета' btnText='Добавить' onFinish={ handleAddReport } error={ error } btnLoading={btnLoading} />
-        </Row>
+            <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
+                <Form name="report-form" onFinish={ handleAddReport }>
+                    <Form.Item>
+                        <DatePicker
+                            format={customWeekStartEndFormat}
+                            onChange={handleDateChange}
+                            picker='week'
+                            placeholder='Неделя'
+                            disabledDate={disabledDate}
+                        />
+                    </Form.Item>
+                    <Space>
+                        <ErrorMessage message={ error } />
+                        <CustomButton htmlType="submit" loading={btnLoading}>
+                            Добавить
+                        </CustomButton>
+                        <CustomButton onClick={ () => navigate(-1)}>
+                            Отмена
+                        </CustomButton>
+                    </Space>
+                </Form>
+            </Card>
     )
 }

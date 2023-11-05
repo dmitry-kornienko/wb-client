@@ -8,6 +8,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import styles from "./index.module.css";
 import { ColumnsType } from "antd/es/table";
 import { Report } from "../../types";
+import { getDate } from "../../utils/get-date-format";
 
 const columns: ColumnsType<Report> = [
     {
@@ -18,11 +19,13 @@ const columns: ColumnsType<Report> = [
     {
         title: "Дата начала",
         dataIndex: "date_from",
+        render: (_, record) => getDate(record.date_from),
         key: "date_from",
     },
     {
         title: "Дата конца",
         dataIndex: "date_to",
+        render: (_, record) => getDate(record.date_to),
         key: "date_to",
     },
     {
