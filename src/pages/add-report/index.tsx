@@ -1,4 +1,4 @@
-import { Card, ConfigProvider, DatePicker, DatePickerProps, Form, Space } from 'antd'
+import { Card, DatePicker, DatePickerProps, Form, Space } from 'antd'
 import { CustomButton } from '../../components/custom-button';
 import { ErrorMessage } from '../../components/error-message';
 import React, { useEffect, useState } from 'react'
@@ -8,19 +8,19 @@ import { selectUser } from '../../features/auth/authSlice';
 import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddReportMutation } from '../../app/services/reports';
+import type { RangePickerProps } from 'antd/es/date-picker';
 
 import dayjs from "dayjs";
-import "dayjs/locale/ru";
-import updateLocale from "dayjs/plugin/updateLocale";
-import locale from "antd/es/locale/ru_RU";
+// import "dayjs/locale/ru";
+// import updateLocale from "dayjs/plugin/updateLocale";
 
-dayjs.extend(updateLocale);
-dayjs.updateLocale("ru", {
-  weekStart: 1
-});
+// dayjs.extend(updateLocale);
+// dayjs.updateLocale("ru", {
+//   weekStart: 1
+// });
 
 export const AddReport = () => {
-
+    
     const [error, setError] = useState('');
     const [btnLoading, setBtnLoading] = useState(false);
     const [selectedWeek, setSelectedWeek] = useState('');
@@ -33,11 +33,17 @@ export const AddReport = () => {
             navigate('/login')
         }
     }, [navigate, user]);
+    
+    const customWeekStartEndFormat: DatePickerProps['format'] = (value) => {
+        const startDate = dayjs(value).startOf('week').add(1, 'day');
+        const endDate = dayjs(value).endOf('week').add(1, 'day');
 
-    const customWeekStartEndFormat: DatePickerProps['format'] = (value) =>
-    `${dayjs(value).startOf('week').format('YYYY-MM-DD')} ~ ${dayjs(value)
-        .endOf('week')
-        .format('YYYY-MM-DD')}`;
+        return `${startDate.format('YYYY-MM-DD')} ~ ${endDate.format('YYYY-MM-DD')}`;
+    };
+
+    const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+        return current && current > dayjs().endOf('day').subtract(1, 'week');
+    };
 
     const handleDateChange = (date: any, dateString: string) => {
         console.log(date)
@@ -45,44 +51,36 @@ export const AddReport = () => {
     };
 
     const handleAddReport = async () => {
+        try {
+            setBtnLoading(true);
 
             const dateFrom = selectedWeek.slice(0, 10);
             const dateTo = selectedWeek.slice(13);
+            const tokenWB = localStorage.getItem('tokenWB');
 
-            console.log(dateFrom)
-            console.log(dateTo)
-        
-        // try {
-        //     setBtnLoading(true);
+            if (tokenWB) {
+                await addReport({dateFrom, dateTo, tokenWB}).unwrap();
+            } else {
+                throw new Error('Неактуальный токен Wildberries');
+            }
 
-        //     const dateFrom = selectedWeek.slice(0, 10);
-        //     const dateTo = selectedWeek.slice(13);
-        //     const tokenWB = localStorage.getItem('tokenWB');
+            setBtnLoading(false);
 
-        //     if (tokenWB) {
-        //         await addReport({dateFrom, dateTo, tokenWB}).unwrap();
-        //     } else {
-        //         throw new Error('Неактуальный токен Wildberries');
-        //     }
+            navigate(Paths.report);
+        } catch (err) {
+            const maybeError = isErrorWithMessage(err);
 
-        //     setBtnLoading(false);
+            if (maybeError) {
+                setError(err.data.message);
+            } else {
+                setError('Неизвестная ошибка');
+            }
 
-        //     navigate(Paths.report);
-        // } catch (err) {
-        //     const maybeError = isErrorWithMessage(err);
-
-        //     if (maybeError) {
-        //         setError(err.data.message);
-        //     } else {
-        //         setError('Неизвестная ошибка');
-        //     }
-
-        //     setBtnLoading(false);
-        // }
+            setBtnLoading(false);
+        }
     }
 
     return (
-        <ConfigProvider locale={locale}>
             <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
                 <Form name="report-form" onFinish={ handleAddReport }>
                     <Form.Item>
@@ -91,6 +89,7 @@ export const AddReport = () => {
                             onChange={handleDateChange}
                             picker='week'
                             placeholder='Неделя'
+                            disabledDate={disabledDate}
                         />
                     </Form.Item>
                     <Space>
@@ -104,6 +103,5 @@ export const AddReport = () => {
                     </Space>
                 </Form>
             </Card>
-        </ConfigProvider>
     )
 }
