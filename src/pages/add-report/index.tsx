@@ -9,15 +9,7 @@ import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddReportMutation } from '../../app/services/reports';
 import type { RangePickerProps } from 'antd/es/date-picker';
-
 import dayjs from "dayjs";
-// import "dayjs/locale/ru";
-// import updateLocale from "dayjs/plugin/updateLocale";
-
-// dayjs.extend(updateLocale);
-// dayjs.updateLocale("ru", {
-//   weekStart: 1
-// });
 
 export const AddReport = () => {
     
@@ -30,7 +22,7 @@ export const AddReport = () => {
     
     useEffect(() => {
         if (!user) {
-            navigate('/login')
+            navigate('/login');
         }
     }, [navigate, user]);
     
@@ -46,7 +38,6 @@ export const AddReport = () => {
     };
 
     const handleDateChange = (date: any, dateString: string) => {
-        console.log(date)
         setSelectedWeek(dateString);
     };
 
@@ -81,27 +72,27 @@ export const AddReport = () => {
     }
 
     return (
-            <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
-                <Form name="report-form" onFinish={ handleAddReport }>
-                    <Form.Item>
-                        <DatePicker
-                            format={customWeekStartEndFormat}
-                            onChange={handleDateChange}
-                            picker='week'
-                            placeholder='Неделя'
-                            disabledDate={disabledDate}
-                        />
-                    </Form.Item>
-                    <Space>
-                        <ErrorMessage message={ error } />
-                        <CustomButton htmlType="submit" loading={btnLoading}>
-                            Добавить
-                        </CustomButton>
-                        <CustomButton onClick={ () => navigate(-1)}>
-                            Отмена
-                        </CustomButton>
-                    </Space>
-                </Form>
-            </Card>
+        <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
+            <Form name="report-form" onFinish={ handleAddReport }>
+                <Form.Item>
+                    <DatePicker
+                        format={customWeekStartEndFormat}
+                        onChange={handleDateChange}
+                        picker='week'
+                        placeholder='Неделя'
+                        disabledDate={disabledDate}
+                    />
+                </Form.Item>
+                <ErrorMessage message={ error } />
+                <Space>
+                    <CustomButton htmlType="submit" loading={btnLoading}>
+                        Добавить
+                    </CustomButton>
+                    <CustomButton onClick={ () => navigate(-1)}>
+                        Отмена
+                    </CustomButton>
+                </Space>
+            </Form>
+        </Card>
     )
 }
