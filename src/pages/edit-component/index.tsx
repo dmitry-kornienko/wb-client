@@ -7,6 +7,7 @@ import { ComponentForm } from "../../components/component-form";
 import { Component } from '../../types';
 import { Paths } from "../../paths";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
+import { Layout } from "../../components/layout";
 
 export const EditComponent = () => {
 
@@ -45,14 +46,16 @@ export const EditComponent = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <ComponentForm
-                title="Редактирование компанента"
-                btnText="Сохранить"
-                onFinish={ handleEditComponent }
-                error={ error }
-                component={ data }
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <ComponentForm
+                    title="Редактирование компанента"
+                    btnText="Сохранить"
+                    onFinish={ handleEditComponent }
+                    error={ error }
+                    component={ data }
+                />
+            </Row>
+        </Layout>
     )
 }

@@ -12,6 +12,7 @@ import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useGetReportQuery, useRemoveReportMutation } from '../../app/services/reports';
 import { ColumnsType } from 'antd/es/table';
 import styles from './index.module.css';
+import { Layout } from '../../components/layout';
 
 const tableColumns: ColumnsType<{
     article: string,
@@ -100,119 +101,121 @@ export const ReportOne = () => {
     }
 
   return (
-    <div className={ styles.desc }>
-        <Descriptions title='Детализация отчета' size='small' bordered style={{ padding: '5px' }}>
-            <Descriptions.Item label='ID отчета' span={ 1 } style={{ width: '150px'}}>
-                { `${data.realizationreport_id}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Дата начала' span={ 1 }>
-                { `${data.date_from}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Дата конца' span={ 1 }>
-                { `${data.date_to}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Оборот' span={ 1 }>
-                { `${data.retail_amount}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Себестоимость' span={ 1 }>
-                { `${data.cost_price}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Логистика' span={ 1 }>
-                { `${data.delivery_rub}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Хранение' span={ 1 }>
-                { `${data.storage_cost}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Удержания' span={ 1 }>
-                { `${data.other_deductions}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Штрафы' span={ 3 }>
-                { `${data.penalty}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='К оплате' span={ 1 }>
-                { `${(data.ppvz_for_pay -
-                    data.delivery_rub -
-                    data.penalty -
-                    data.other_deductions -
-                    data.storage_cost).toFixed(2)}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Доход' span={ 1 }>
-                { `${(data.ppvz_for_pay -
-                data.cost_price -
-                data.retail_amount*0.07 -
-                data.delivery_rub -
-                data.penalty -
-                data.other_deductions -
-                data.storage_cost).toFixed(2)}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Маржинальность' span={ 1 }>
-                { `${(((data.ppvz_for_pay -
+    <Layout>
+        <div className={ styles.desc }>
+            <Descriptions title='Детализация отчета' size='small' bordered style={{ padding: '5px' }}>
+                <Descriptions.Item label='ID отчета' span={ 1 } style={{ width: '150px'}}>
+                    { `${data.realizationreport_id}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Дата начала' span={ 1 }>
+                    { `${data.date_from}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Дата конца' span={ 1 }>
+                    { `${data.date_to}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Оборот' span={ 1 }>
+                    { `${data.retail_amount}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Себестоимость' span={ 1 }>
+                    { `${data.cost_price}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Логистика' span={ 1 }>
+                    { `${data.delivery_rub}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Хранение' span={ 1 }>
+                    { `${data.storage_cost}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Удержания' span={ 1 }>
+                    { `${data.other_deductions}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Штрафы' span={ 3 }>
+                    { `${data.penalty}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='К оплате' span={ 1 }>
+                    { `${(data.ppvz_for_pay -
+                        data.delivery_rub -
+                        data.penalty -
+                        data.other_deductions -
+                        data.storage_cost).toFixed(2)}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Доход' span={ 1 }>
+                    { `${(data.ppvz_for_pay -
                     data.cost_price -
                     data.retail_amount*0.07 -
                     data.delivery_rub -
                     data.penalty -
                     data.other_deductions -
-                    data.storage_cost)
-                    /
-                    (data.ppvz_for_pay -
-                    data.delivery_rub -
-                    data.penalty -
-                    data.other_deductions -
-                    data.storage_cost))*100).toFixed(2)} %` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Состав' span={ 3 }>
-                <Table
-                    bordered
-                    dataSource={ data.composition }
-                    columns={ tableColumns }
-                    size="small"
-                    pagination={ false }
-                />
-            </Descriptions.Item>
-        </Descriptions>
-        {
-            user ? (
-                <>
-                    <Divider orientation='left'>Действия</Divider>
-                    <Space>
-                        <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                                Назад
-                        </CustomButton>
-                        <Link to={`/report/edit/${data._id}`}>
+                    data.storage_cost).toFixed(2)}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Маржинальность' span={ 1 }>
+                    { `${(((data.ppvz_for_pay -
+                        data.cost_price -
+                        data.retail_amount*0.07 -
+                        data.delivery_rub -
+                        data.penalty -
+                        data.other_deductions -
+                        data.storage_cost)
+                        /
+                        (data.ppvz_for_pay -
+                        data.delivery_rub -
+                        data.penalty -
+                        data.other_deductions -
+                        data.storage_cost))*100).toFixed(2)} %` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Состав' span={ 3 }>
+                    <Table
+                        bordered
+                        dataSource={ data.composition }
+                        columns={ tableColumns }
+                        size="small"
+                        pagination={ false }
+                    />
+                </Descriptions.Item>
+            </Descriptions>
+            {
+                user ? (
+                    <>
+                        <Divider orientation='left'>Действия</Divider>
+                        <Space>
+                            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                                    Назад
+                            </CustomButton>
+                            <Link to={`/report/edit/${data._id}`}>
+                                <CustomButton
+                                    shape='round'
+                                    type='default'
+                                    icon={ <EditOutlined />}
+                                >
+                                    Внести недостающие данные
+                                </CustomButton>
+                            </Link>
                             <CustomButton
                                 shape='round'
-                                type='default'
-                                icon={ <EditOutlined />}
+                                danger
+                                onClick={ showModal }
+                                icon={ <DeleteOutlined /> }
                             >
-                                Внести недостающие данные
+                                Удалить
                             </CustomButton>
-                        </Link>
-                        <CustomButton
-                            shape='round'
-                            danger
-                            onClick={ showModal }
-                            icon={ <DeleteOutlined /> }
-                        >
-                            Удалить
-                        </CustomButton>
-                    </Space>
-                </>
-            ) :         
-            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                Назад
-            </CustomButton>
-        }
-        <ErrorMessage message={ error } />
-        <Modal
-            title='Подтвердите удаление'
-            open={ isModalOpen }
-            onOk={ handleDeleteReport }
-            onCancel={ hideModal }
-            okText='Подтвердить'
-            cancelText='Отменить'
-        >
-            Действительно хотите удалить отчет из таблицы?    
-        </Modal>
-    </div>
+                        </Space>
+                    </>
+                ) :         
+                <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                    Назад
+                </CustomButton>
+            }
+            <ErrorMessage message={ error } />
+            <Modal
+                title='Подтвердите удаление'
+                open={ isModalOpen }
+                onOk={ handleDeleteReport }
+                onCancel={ hideModal }
+                okText='Подтвердить'
+                cancelText='Отменить'
+            >
+                Действительно хотите удалить отчет из таблицы?    
+            </Modal>
+        </div>
+    </Layout>
   )
 }

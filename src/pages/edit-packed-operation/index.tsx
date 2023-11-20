@@ -7,6 +7,7 @@ import { isErrorWithMessage } from "../../utils/is-error-with-message";
 import { PackedOperation } from '../../types';
 import { useEditPackedOperationMutation, useGetPackedOperationQuery } from "../../app/services/packed-operations";
 import { PackedOperationForm } from "../../components/packedOperation-form";
+import { Layout } from "../../components/layout";
 
 export const EditPackedOperation = () => {
 
@@ -51,16 +52,18 @@ export const EditPackedOperation = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <PackedOperationForm
-                title="Редактирование операции"
-                btnText="Сохранить"
-                onFinish={ handleEditPackedOperation }
-                error={ error }
-                packedOperation={ data }
-                editForm={ true }
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <PackedOperationForm
+                    title="Редактирование операции"
+                    btnText="Сохранить"
+                    onFinish={ handleEditPackedOperation }
+                    error={ error }
+                    packedOperation={ data }
+                    editForm={ true }
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     )
 }

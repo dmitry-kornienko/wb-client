@@ -8,6 +8,7 @@ import { useEditComplectMutation, useGetComplectQuery } from "../../app/services
 import { Complect } from "../../types";
 import { ComplectForm } from "../../components/complect-form";
 import { useGetAllComponentsQuery } from "../../app/services/components";
+import { Layout } from "../../components/layout";
 
 export const EditComplect = () => {
 
@@ -66,16 +67,18 @@ export const EditComplect = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <ComplectForm
-                title="Редактирование комплекта"
-                btnText="Сохранить"
-                onFinish={handleEditComplect}
-                error={error}
-                complect={data}
-                editForm={true}
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <ComplectForm
+                    title="Редактирование комплекта"
+                    btnText="Сохранить"
+                    onFinish={handleEditComplect}
+                    error={error}
+                    complect={data}
+                    editForm={true}
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     )
 }

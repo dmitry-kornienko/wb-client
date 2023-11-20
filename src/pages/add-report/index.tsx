@@ -10,6 +10,7 @@ import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddReportMutation } from '../../app/services/reports';
 import type { RangePickerProps } from 'antd/es/date-picker';
 import dayjs from "dayjs";
+import { Layout } from '../../components/layout';
 
 export const AddReport = () => {
     
@@ -72,27 +73,29 @@ export const AddReport = () => {
     }
 
     return (
-        <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
-            <Form name="report-form" onFinish={ handleAddReport }>
-                <Form.Item>
-                    <DatePicker
-                        format={customWeekStartEndFormat}
-                        onChange={handleDateChange}
-                        picker='week'
-                        placeholder='Неделя'
-                        disabledDate={disabledDate}
-                    />
-                </Form.Item>
-                <ErrorMessage message={ error } />
-                <Space>
-                    <CustomButton htmlType="submit" loading={btnLoading} disabled={selectedWeek ? false : true}>
-                        Добавить
-                    </CustomButton>
-                    <CustomButton onClick={ () => navigate(-1)}>
-                        Отмена
-                    </CustomButton>
-                </Space>
-            </Form>
-        </Card>
+        <Layout>
+            <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
+                <Form name="report-form" onFinish={ handleAddReport }>
+                    <Form.Item>
+                        <DatePicker
+                            format={customWeekStartEndFormat}
+                            onChange={handleDateChange}
+                            picker='week'
+                            placeholder='Неделя'
+                            disabledDate={disabledDate}
+                        />
+                    </Form.Item>
+                    <ErrorMessage message={ error } />
+                    <Space>
+                        <CustomButton htmlType="submit" loading={btnLoading} disabled={selectedWeek ? false : true}>
+                            Добавить
+                        </CustomButton>
+                        <CustomButton onClick={ () => navigate(-1)}>
+                            Отмена
+                        </CustomButton>
+                    </Space>
+                </Form>
+            </Card>
+        </Layout>
     )
 }

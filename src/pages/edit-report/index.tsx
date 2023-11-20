@@ -6,6 +6,7 @@ import { Paths } from "../../paths";
 import { isErrorWithMessage } from "../../utils/is-error-with-message";
 import { useEditReportMutation, useGetReportQuery } from "../../app/services/reports";
 import { EditReportForm } from "../../components/report-edit-form";
+import { Layout } from "../../components/layout";
 
 type DataFromForm = {
     storage_cost: number,
@@ -47,15 +48,17 @@ export const EditReport = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <EditReportForm
-                title="Редактирование отчета"
-                btnText="Сохранить"
-                onFinish={ handleEditReport }
-                error={ error }
-                data={ data }
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <EditReportForm
+                    title="Редактирование отчета"
+                    btnText="Сохранить"
+                    onFinish={ handleEditReport }
+                    error={ error }
+                    data={ data }
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     )
 }

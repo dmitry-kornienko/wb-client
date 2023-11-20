@@ -8,6 +8,7 @@ import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddComplectMutation } from '../../app/services/complects';
 import { Complect } from '../../types';
 import { ComplectForm } from '../../components/complect-form';
+import { Layout } from '../../components/layout';
 
 export const AddComplect = () => {
 
@@ -47,8 +48,10 @@ export const AddComplect = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <ComplectForm title='Добавление комплекта' btnText='Добавить' onFinish={ handleAddComplect } error={ error } />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <ComplectForm title='Добавление комплекта' btnText='Добавить' onFinish={ handleAddComplect } error={ error } />
+            </Row>
+        </Layout>
     )
 }

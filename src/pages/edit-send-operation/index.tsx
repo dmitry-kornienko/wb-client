@@ -9,6 +9,7 @@ import { SendOperationForm } from '../../components/send-operations-form';
 import { SendOperation } from '../../types';
 import { useEditSendOperationMutation, useGetSendOperationQuery } from '../../app/services/send-operations';
 import { Loader } from '../../components/loader';
+import { Layout } from '../../components/layout';
 
 export const EditSendOperation = () => {
 
@@ -60,16 +61,18 @@ export const EditSendOperation = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <SendOperationForm
-                sendOperation={ data }
-                editForm={true}
-                title='Добавление поставки'
-                btnText='Сохранить'
-                onFinish={handleEditSendOperation}
-                error={error}
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <SendOperationForm
+                    sendOperation={ data }
+                    editForm={true}
+                    title='Добавление поставки'
+                    btnText='Сохранить'
+                    onFinish={handleEditSendOperation}
+                    error={error}
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     )
 }

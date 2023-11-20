@@ -1,12 +1,15 @@
 import { Complects } from "../../components/complects";
 import { Components } from "../../components/components";
-import styles from './index.module.css';
+import { Layout } from "../../components/layout";
+import styles from "./index.module.css";
 
 export const Home = () => {
-  return (
-    <div className={ styles.homePage }>
-      <Components />
-      <Complects />
-    </div>
-  )
-}
+    return (
+        <Layout>
+            <div className={styles.homePage}>
+                <Components />
+                <Complects />
+            </div>
+        </Layout>
+    );
+};

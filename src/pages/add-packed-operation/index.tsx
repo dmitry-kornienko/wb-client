@@ -8,6 +8,7 @@ import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { PackedOperation } from '../../types';
 import { useAddPackedOperationMutation } from '../../app/services/packed-operations';
 import { PackedOperationForm } from '../../components/packedOperation-form';
+import { Layout } from '../../components/layout';
 
 export const AddPackedOperation = () => {
 
@@ -46,8 +47,10 @@ export const AddPackedOperation = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <PackedOperationForm title='Добавление операции' btnText='Сохранить' onFinish={handleAddPackedOperation} error={error} btnLoading={btnLoading} />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <PackedOperationForm title='Добавление операции' btnText='Сохранить' onFinish={handleAddPackedOperation} error={error} btnLoading={btnLoading} />
+            </Row>
+        </Layout>
     )
 }

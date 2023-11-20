@@ -8,6 +8,7 @@ import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { SendOperationForm } from '../../components/send-operations-form';
 import { SendOperation } from '../../types';
 import { useAddSendOperationMutation } from '../../app/services/send-operations';
+import { Layout } from '../../components/layout';
 
 export const AddSendOperation = () => {
 
@@ -50,8 +51,10 @@ export const AddSendOperation = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <SendOperationForm title='Добавление поставки' btnText='Сохранить' onFinish={handleAddSendOperation} error={error} btnLoading={btnLoading} />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <SendOperationForm title='Добавление поставки' btnText='Сохранить' onFinish={handleAddSendOperation} error={error} btnLoading={btnLoading} />
+            </Row>
+        </Layout>
     )
 }

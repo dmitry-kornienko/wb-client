@@ -9,6 +9,7 @@ import { BuyOperation } from '../../types';
 import { useEditBuyOperationMutation, useGetBuyOperationQuery } from '../../app/services/buy-operations';
 import { BuyOperationForm } from '../../components/buyOperation-form';
 import { Loader } from '../../components/loader';
+import { Layout } from '../../components/layout';
 
 export const EditBuyOperation = () => {
 
@@ -60,16 +61,18 @@ export const EditBuyOperation = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <BuyOperationForm
-                title='Редактирование операции'
-                btnText='Сохранить'
-                onFinish={handleEditBuyOperation}
-                error={error}
-                buyOperation={data}
-                editForm={true}
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <BuyOperationForm
+                    title='Редактирование операции'
+                    btnText='Сохранить'
+                    onFinish={handleEditBuyOperation}
+                    error={error}
+                    buyOperation={data}
+                    editForm={true}
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     )
 }

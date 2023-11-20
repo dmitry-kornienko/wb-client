@@ -14,6 +14,7 @@ import { getDate } from '../../utils/get-date-format';
 import { useGetSendOperationQuery, useRemoveSendOperationMutation } from '../../app/services/send-operations';
 import { ColumnsType } from 'antd/es/table';
 import { Complect } from '../../types';
+import { Layout } from '../../components/layout';
 
 const tableColumns: ColumnsType<{ complect: Complect, count: number }> = [
     {
@@ -85,97 +86,99 @@ export const SendOperation = () => {
     }
 
   return (
-    <div className={ styles.desc }>
-        <Descriptions title='Информация о поставке' size='small' bordered style={{ padding: '5px' }}>
-            <Descriptions.Item label='Дата отправки' span={ 3 } style={{ width: '150px'}}>
-                { getDate(data.sendingData) }
-            </Descriptions.Item>
-            <Descriptions.Item label='Комплекты' span={ 3 } style={{ width: '150px'}}>
-                {
-                    <Table 
-                        bordered
-                        dataSource={ data.composition }
-                        columns={ tableColumns }
-                        size="small"
-                        pagination={ false }
-                    />
-                }
-            </Descriptions.Item>
-            <Descriptions.Item label='Склад' span={ 3 }>
-                { `${data.warehous}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Упаковано' span={ 3 }>
-                { data.isPacked ? 'Да' : 'Нет' }
-            </Descriptions.Item>
-            <Descriptions.Item label='Отправлено' span={ 3 }>
-                { data.isSended ? 'Да' : 'Нет' }
-            </Descriptions.Item>
-            <Descriptions.Item label='Номер поставки' span={ 3 }>
-                { data.sendNumberMP ? data.sendNumberMP : 'Номер не указан' }
-            </Descriptions.Item>
-            <Descriptions.Item label='Накладная' span={ 3 }>
-                { data.invoiceNumber ? data.sendNumberMP : 'Номер не указан' }
-            </Descriptions.Item>
-            <Descriptions.Item label='Мест' span={ 3 }>
-                { `${data.partCount}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Вес' span={ 3 }>
-                { `${data.weight}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Дата приемки' span={ 3 } style={{ width: '150px'}}>
-            { getDate(data.acceptDate) }
-            </Descriptions.Item>
-            <Descriptions.Item label='Согласовано' span={ 3 }>
-                { data.isAgreed ? 'Да' : 'Нет' }
-            </Descriptions.Item>
-            <Descriptions.Item label='Принято' span={ 3 }>
-                { data.isAccepted ? 'Да' : 'Нет' }
-            </Descriptions.Item>
-        </Descriptions>
-        {
-            user ? (
-                <>
-                    <Divider orientation='left'>Действия</Divider>
-                    <ErrorMessage message={ error } />
-                    <Space>
-                        <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                            Назад
-                        </CustomButton>
-                        <Link to={`/send-operation/edit/${data._id}`}>
+    <Layout>
+        <div className={ styles.desc }>
+            <Descriptions title='Информация о поставке' size='small' bordered style={{ padding: '5px' }}>
+                <Descriptions.Item label='Дата отправки' span={ 3 } style={{ width: '150px'}}>
+                    { getDate(data.sendingData) }
+                </Descriptions.Item>
+                <Descriptions.Item label='Комплекты' span={ 3 } style={{ width: '150px'}}>
+                    {
+                        <Table 
+                            bordered
+                            dataSource={ data.composition }
+                            columns={ tableColumns }
+                            size="small"
+                            pagination={ false }
+                        />
+                    }
+                </Descriptions.Item>
+                <Descriptions.Item label='Склад' span={ 3 }>
+                    { `${data.warehous}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Упаковано' span={ 3 }>
+                    { data.isPacked ? 'Да' : 'Нет' }
+                </Descriptions.Item>
+                <Descriptions.Item label='Отправлено' span={ 3 }>
+                    { data.isSended ? 'Да' : 'Нет' }
+                </Descriptions.Item>
+                <Descriptions.Item label='Номер поставки' span={ 3 }>
+                    { data.sendNumberMP ? data.sendNumberMP : 'Номер не указан' }
+                </Descriptions.Item>
+                <Descriptions.Item label='Накладная' span={ 3 }>
+                    { data.invoiceNumber ? data.sendNumberMP : 'Номер не указан' }
+                </Descriptions.Item>
+                <Descriptions.Item label='Мест' span={ 3 }>
+                    { `${data.partCount}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Вес' span={ 3 }>
+                    { `${data.weight}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Дата приемки' span={ 3 } style={{ width: '150px'}}>
+                { getDate(data.acceptDate) }
+                </Descriptions.Item>
+                <Descriptions.Item label='Согласовано' span={ 3 }>
+                    { data.isAgreed ? 'Да' : 'Нет' }
+                </Descriptions.Item>
+                <Descriptions.Item label='Принято' span={ 3 }>
+                    { data.isAccepted ? 'Да' : 'Нет' }
+                </Descriptions.Item>
+            </Descriptions>
+            {
+                user ? (
+                    <>
+                        <Divider orientation='left'>Действия</Divider>
+                        <ErrorMessage message={ error } />
+                        <Space>
+                            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                                Назад
+                            </CustomButton>
+                            <Link to={`/send-operation/edit/${data._id}`}>
+                                <CustomButton
+                                    shape='round'
+                                    type='default'
+                                    icon={ <EditOutlined />}
+                                >
+                                    Редактировать
+                                </CustomButton>
+                            </Link>
                             <CustomButton
                                 shape='round'
-                                type='default'
-                                icon={ <EditOutlined />}
+                                danger
+                                onClick={ showModal }
+                                icon={ <DeleteOutlined /> }
+                                disabled={ data.isSended ? true : false }
                             >
-                                Редактировать
+                                { data.isSended ? 'Нельзя удалить отправленную поставку' : 'Удалить' }
                             </CustomButton>
-                        </Link>
-                        <CustomButton
-                            shape='round'
-                            danger
-                            onClick={ showModal }
-                            icon={ <DeleteOutlined /> }
-                            disabled={ data.isSended ? true : false }
-                        >
-                            { data.isSended ? 'Нельзя удалить отправленную поставку' : 'Удалить' }
-                        </CustomButton>
-                    </Space>
-                </>
-            ) :         
-            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                Назад
-            </CustomButton>
-        }
-        <Modal
-            title='Подтвердите удаление'
-            open={ isModalOpen }
-            onOk={ handleDeleteSendOperation }
-            onCancel={ hideModal }
-            okText='Подтвердить'
-            cancelText='Отменить'
-        >
-            Действительно хотите удалить поставку?    
-        </Modal>
-    </div>
+                        </Space>
+                    </>
+                ) :         
+                <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                    Назад
+                </CustomButton>
+            }
+            <Modal
+                title='Подтвердите удаление'
+                open={ isModalOpen }
+                onOk={ handleDeleteSendOperation }
+                onCancel={ hideModal }
+                okText='Подтвердить'
+                cancelText='Отменить'
+            >
+                Действительно хотите удалить поставку?    
+            </Modal>
+        </div>
+    </Layout>
   )
 }

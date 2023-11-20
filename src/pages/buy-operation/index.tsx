@@ -14,6 +14,7 @@ import {Component } from '../../types';
 import { useGetBuyOperationQuery, useRemoveBuyOperationMutation } from '../../app/services/buy-operations';
 import styles from './index.module.css';
 import { getDate } from '../../utils/get-date-format';
+import { Layout } from '../../components/layout';
 
 const tableColumns: ColumnsType<{ component: Component, count: number, price: number }> = [
     {
@@ -91,67 +92,69 @@ export const BuyOperation = () => {
     };
 
   return (
-    <div className={ styles.desc }>
-        <Descriptions title='Информация о операции закупки' size='small' bordered style={{ padding: '5px' }}>
-            <Descriptions.Item label='Дата' span={ 3 } style={{ width: '150px'}}>
-                { getDate(data.date) }
-            </Descriptions.Item>
-            <Descriptions.Item label='Состав' span={ 3 }>
-                <Table
-                    bordered
-                    dataSource={ data.composition }
-                    columns={ tableColumns }
-                    size="small"
-                    pagination={ false }
-                />
-            </Descriptions.Item>
-            <Descriptions.Item label='Итого' span={ 3 }>
-                { `${data.composition.reduce((sum, elem) => (sum + (elem.count * elem.component.price)), 0)} руб.` }
-            </Descriptions.Item>
-        </Descriptions>
-        {
-            user ? (
-                <>
-                    <Divider orientation='left'>Действия</Divider>
-                    <Space>
-                        <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                                Назад
-                        </CustomButton>
-                        <Link to={`/buy-operation/edit/${data._id}`}>
+    <Layout>
+        <div className={ styles.desc }>
+            <Descriptions title='Информация о операции закупки' size='small' bordered style={{ padding: '5px' }}>
+                <Descriptions.Item label='Дата' span={ 3 } style={{ width: '150px'}}>
+                    { getDate(data.date) }
+                </Descriptions.Item>
+                <Descriptions.Item label='Состав' span={ 3 }>
+                    <Table
+                        bordered
+                        dataSource={ data.composition }
+                        columns={ tableColumns }
+                        size="small"
+                        pagination={ false }
+                    />
+                </Descriptions.Item>
+                <Descriptions.Item label='Итого' span={ 3 }>
+                    { `${data.composition.reduce((sum, elem) => (sum + (elem.count * elem.component.price)), 0)} руб.` }
+                </Descriptions.Item>
+            </Descriptions>
+            {
+                user ? (
+                    <>
+                        <Divider orientation='left'>Действия</Divider>
+                        <Space>
+                            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                                    Назад
+                            </CustomButton>
+                            <Link to={`/buy-operation/edit/${data._id}`}>
+                                <CustomButton
+                                    shape='round'
+                                    type='default'
+                                    icon={ <EditOutlined />}
+                                >
+                                    Редактировать
+                                </CustomButton>
+                            </Link>
                             <CustomButton
                                 shape='round'
-                                type='default'
-                                icon={ <EditOutlined />}
+                                danger
+                                onClick={ showModal }
+                                icon={ <DeleteOutlined /> }
                             >
-                                Редактировать
+                                Удалить
                             </CustomButton>
-                        </Link>
-                        <CustomButton
-                            shape='round'
-                            danger
-                            onClick={ showModal }
-                            icon={ <DeleteOutlined /> }
-                        >
-                            Удалить
-                        </CustomButton>
-                    </Space>
-                </>
-            ) :         
-            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                Назад
-            </CustomButton>
-        }
-        <ErrorMessage message={ error } />
-        <Modal
-            title='Подтвердите удаление'
-            open={ isModalOpen }
-            onOk={ handleDeleteBuyOperation }
-            onCancel={ hideModal }
-            okText='Подтвердить'
-            cancelText='Отменить'
-        >
-            Действительно хотите удалить комплект из таблицы?    
-        </Modal>
-    </div>
+                        </Space>
+                    </>
+                ) :         
+                <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                    Назад
+                </CustomButton>
+            }
+            <ErrorMessage message={ error } />
+            <Modal
+                title='Подтвердите удаление'
+                open={ isModalOpen }
+                onOk={ handleDeleteBuyOperation }
+                onCancel={ hideModal }
+                okText='Подтвердить'
+                cancelText='Отменить'
+            >
+                Действительно хотите удалить комплект из таблицы?    
+            </Modal>
+        </div>
+    </Layout>
   )
 }

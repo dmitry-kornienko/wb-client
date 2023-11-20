@@ -13,6 +13,7 @@ import { useGetComplectQuery, useRemoveComplectMutation } from '../../app/servic
 import { ColumnsType } from 'antd/es/table';
 import { Complect as ComplectModel, Component } from '../../types';
 import styles from './index.module.css';
+import { Layout } from '../../components/layout';
 
 const tableColumns: ColumnsType<{ name: string, article: string, count: number, price: number }> = [
     {
@@ -109,76 +110,78 @@ export const Complect = () => {
     };
 
   return (
-    <div className={ styles.desc }>
-        <Descriptions title='Информация о комплекте' size='small' bordered style={{ padding: '5px' }}>
-            <Descriptions.Item label='Название' span={ 3 } style={{ width: '150px'}}>
-                { `${data.name}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Артикул' span={ 3 }>
-                { `${data.article}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Количество' span={ 3 }>
-                { `${data.count}` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Состав' span={ 3 }>
-                <Table
-                    bordered
-                    dataSource={ componentsArr }
-                    columns={ tableColumns }
-                    size="small"
-                    pagination={ false }
-                />
-            </Descriptions.Item>
-            <Descriptions.Item label='Себестоимость' span={ 3 }>
-                { `${getComplectCost(data)} руб.` }
-            </Descriptions.Item>
-            <Descriptions.Item label='Цена закупки' span={ 3 }>
-                { `${data.costPrice} руб.` }
-            </Descriptions.Item>
-        </Descriptions>
-        {
-            user ? (
-                <>
-                    <Divider orientation='left'>Действия</Divider>
-                    <Space>
-                        <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                                Назад
-                        </CustomButton>
-                        <Link to={`/complect/edit/${data._id}`}>
+    <Layout>
+        <div className={ styles.desc }>
+            <Descriptions title='Информация о комплекте' size='small' bordered style={{ padding: '5px' }}>
+                <Descriptions.Item label='Название' span={ 3 } style={{ width: '150px'}}>
+                    { `${data.name}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Артикул' span={ 3 }>
+                    { `${data.article}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Количество' span={ 3 }>
+                    { `${data.count}` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Состав' span={ 3 }>
+                    <Table
+                        bordered
+                        dataSource={ componentsArr }
+                        columns={ tableColumns }
+                        size="small"
+                        pagination={ false }
+                    />
+                </Descriptions.Item>
+                <Descriptions.Item label='Себестоимость' span={ 3 }>
+                    { `${getComplectCost(data)} руб.` }
+                </Descriptions.Item>
+                <Descriptions.Item label='Цена закупки' span={ 3 }>
+                    { `${data.costPrice} руб.` }
+                </Descriptions.Item>
+            </Descriptions>
+            {
+                user ? (
+                    <>
+                        <Divider orientation='left'>Действия</Divider>
+                        <Space>
+                            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                                    Назад
+                            </CustomButton>
+                            <Link to={`/complect/edit/${data._id}`}>
+                                <CustomButton
+                                    shape='round'
+                                    type='default'
+                                    icon={ <EditOutlined />}
+                                >
+                                    Редактировать
+                                </CustomButton>
+                            </Link>
                             <CustomButton
                                 shape='round'
-                                type='default'
-                                icon={ <EditOutlined />}
+                                danger
+                                onClick={ showModal }
+                                icon={ <DeleteOutlined /> }
                             >
-                                Редактировать
+                                Удалить
                             </CustomButton>
-                        </Link>
-                        <CustomButton
-                            shape='round'
-                            danger
-                            onClick={ showModal }
-                            icon={ <DeleteOutlined /> }
-                        >
-                            Удалить
-                        </CustomButton>
-                    </Space>
-                </>
-            ) :         
-            <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                Назад
-            </CustomButton>
-        }
-        <ErrorMessage message={ error } />
-        <Modal
-            title='Подтвердите удаление'
-            open={ isModalOpen }
-            onOk={ handleDeleteComplect }
-            onCancel={ hideModal }
-            okText='Подтвердить'
-            cancelText='Отменить'
-        >
-            Действительно хотите удалить комплект из таблицы?    
-        </Modal>
-    </div>
+                        </Space>
+                    </>
+                ) :         
+                <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
+                    Назад
+                </CustomButton>
+            }
+            <ErrorMessage message={ error } />
+            <Modal
+                title='Подтвердите удаление'
+                open={ isModalOpen }
+                onOk={ handleDeleteComplect }
+                onCancel={ hideModal }
+                okText='Подтвердить'
+                cancelText='Отменить'
+            >
+                Действительно хотите удалить комплект из таблицы?    
+            </Modal>
+        </div>
+    </Layout>
   )
 }

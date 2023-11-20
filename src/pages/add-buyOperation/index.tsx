@@ -8,6 +8,7 @@ import { isErrorWithMessage } from "../../utils/is-error-with-message";
 import { BuyOperation } from "../../types";
 import { useAddBuyOperationMutation } from "../../app/services/buy-operations";
 import { BuyOperationForm } from "../../components/buyOperation-form";
+import { Layout } from "../../components/layout";
 
 export const AddBuyOperation = () => {
     const [error, setError] = useState("");
@@ -50,14 +51,16 @@ export const AddBuyOperation = () => {
     };
 
     return (
-        <Row align="middle" justify="center">
-            <BuyOperationForm
-                title="Добавление операции"
-                btnText="Добавить"
-                onFinish={handleAddBuyOperation}
-                error={error}
-                btnLoading={btnLoading}
-            />
-        </Row>
+        <Layout>
+            <Row align="middle" justify="center">
+                <BuyOperationForm
+                    title="Добавление операции"
+                    btnText="Добавить"
+                    onFinish={handleAddBuyOperation}
+                    error={error}
+                    btnLoading={btnLoading}
+                />
+            </Row>
+        </Layout>
     );
 };

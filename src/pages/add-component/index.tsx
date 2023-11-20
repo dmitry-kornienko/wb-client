@@ -8,6 +8,7 @@ import { useAddComponentMutation } from '../../app/services/components';
 import { Component } from '../../types';
 import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
+import { Layout } from '../../components/layout';
 
 export const AddComponent = () => {
 
@@ -43,8 +44,10 @@ export const AddComponent = () => {
     }
 
     return (
-        <Row align='middle' justify='center'>
-            <ComponentForm title='Добавление компонента' btnText='Добавить' onFinish={ handleAddComponent } error={ error } />
-        </Row>
+        <Layout>
+            <Row align='middle' justify='center'>
+                <ComponentForm title='Добавление компонента' btnText='Добавить' onFinish={ handleAddComponent } error={ error } />
+            </Row>
+        </Layout>
     )
 }

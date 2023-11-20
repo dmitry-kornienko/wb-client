@@ -6,6 +6,7 @@ import { selectUser } from "../../features/auth/authSlice";
 import { Modal } from "antd";
 import { Paths } from "../../paths";
 import { ReportsOfMonth } from "../../components/reports-of-month";
+import { Layout } from "../../components/layout";
 
 export const ReportPage = () => {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const ReportPage = () => {
     };
 
     return (
-        <div>
+        <Layout>
             <Reports />
             <ReportsOfMonth />
             <Modal
@@ -40,6 +41,6 @@ export const ReportPage = () => {
             >
                 К сожалению, данный раздел не доступен для вашего аккаунта
             </Modal>
-        </div>
+        </Layout>
     );
 };
