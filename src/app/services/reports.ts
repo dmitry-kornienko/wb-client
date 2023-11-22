@@ -16,11 +16,11 @@ export const reportsApi = api.injectEndpoints({
                 method: 'GET'
             })
         }),
-        editReport: builder.mutation<string, {id: string, storage_cost: number, other_deductions: number}>({
-            query: ({id, storage_cost, other_deductions}) => ({
+        editReport: builder.mutation<string, {id: string, storage: number, taking_payment: number, other_deductions: number, business_costs: number}>({
+            query: ({id, storage, taking_payment, other_deductions, business_costs}) => ({
                 url: `/report/edit/${id}`,
                 method: 'PATCH',
-                body: {id, storage_cost, other_deductions}
+                body: {id, storage, taking_payment, other_deductions, business_costs}
             }),
         }),
         removeReport: builder.mutation<string, string>({

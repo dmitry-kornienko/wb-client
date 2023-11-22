@@ -29,9 +29,13 @@ export const EditReportForm: React.FC<Props<Report>> = ({
         <Card title={ title } style={{ width: '30rem', margin: '10px 0'}}>
             <Form name="component-form" onFinish={ onFinish } initialValues={ data }>
                 <label>Стоимость хранения</label>
-                <CustomInput type="number" name="storage_cost" placeholder="Стоимость хранения" />
+                <CustomInput type="number" name="storage" placeholder="Стоимость хранения" />
+                <label>Платная приемка</label>
+                <CustomInput type="number" name="taking_payment" placeholder="Платная приемка" />
                 <label>Прочие удержания</label>
                 <CustomInput type="number" name="other_deductions" placeholder="Прочие удержания" />
+                <label>Дополнительные расходы</label>
+                <CustomInput type="number" name="business_costs" placeholder="Дополнительные расходы" />
                 <Space>
                     <ErrorMessage message={ error } />
                     <CustomButton htmlType="submit" loading={btnLoading}>

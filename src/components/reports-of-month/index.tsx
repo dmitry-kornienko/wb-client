@@ -1,18 +1,36 @@
-import React from "react";
 import { useGetAllReportsQuery } from "../../app/services/reports";
 import { Loader } from "../loader";
-import { Report } from "../../types";
 import { Card, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { addSpacesToNumberWithDecimal } from "../../utils/add-spaces-to-number";
 import styles from "./index.module.css";
 
-type ExtendedType = Omit<
-    Report,
-    "realizationreport_id" | "_id" | "date_from" | "date_to"
-> & { month: string, year: string };
+type MonthReportType = {
+    month: string,
+    year: string,
+    sale: number,
+    ppvz_for_pay: number,
+    cost_price_sum: number,
+    delivery_sum: number,
+    penalty: number,
+    storage: number,
+    other_deductions: number,
+    total_payment: number,
+    net_profit: number,
+    final_profit: number,
+    composition: {
+        article: string,
+        sale_count: number,
+        return_count: number,
+        cost_price: number,
+        sale_sum: number,
+        retail_amount: number,
+        return_sum: number,
+        delivery: number,
+    }[]
+}
 
-const columns: ColumnsType<ExtendedType> = [
+const columns: ColumnsType<MonthReportType> = [
     {
         title: "Год",
         dataIndex: "year",
@@ -24,28 +42,28 @@ const columns: ColumnsType<ExtendedType> = [
         key: "month",
     },
     {
-        title: "Оборот",
-        dataIndex: "retail_amount",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.retail_amount)}</div>,
-        key: "retail_amount",
+        title: "Продажа",
+        dataIndex: "sale",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.sale)}</div>,
+        key: "sale",
     },
     {
         title: "Себестоимость",
-        dataIndex: "cost_price",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.cost_price)}</div>,
-        key: "cost_price",
+        dataIndex: "cost_price_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.cost_price_sum)}</div>,
+        key: "cost_price_sum",
     },
     {
         title: "Логистика",
-        dataIndex: "delivery_rub",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.delivery_rub)}</div>,
-        key: "delivery_rub",
+        dataIndex: "delivery_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.delivery_sum)}</div>,
+        key: "delivery_sum",
     },
     {
         title: "Хранение",
-        dataIndex: "storage_cost",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.storage_cost)}</div>,
-        key: "storage_cost",
+        dataIndex: "storage",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.storage)}</div>,
+        key: "storage",
     },
     {
         title: "Удержания",
@@ -61,58 +79,17 @@ const columns: ColumnsType<ExtendedType> = [
     },
     {
         title: "К оплате",
-        render: (_, record) => (
-            <div>
-                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost)}
-            </div>
-        ),
+        dataIndex: "total_payment",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.total_payment)}</div>,
+        key: "total_payment",
     },
     {
         title: "Доход",
-        render: (_, record) => (
-            <div className={
-                record.ppvz_for_pay -
-                record.cost_price -
-                record.retail_amount*0.07 -
-                record.delivery_rub -
-                record.penalty -
-                record.other_deductions -
-                record.storage_cost < 0 ?
-                styles.bad : ''
-            }>
-                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
-                record.cost_price -
-                record.retail_amount*0.07 -
-                record.delivery_rub -
-                record.penalty -
-                record.other_deductions -
-                record.storage_cost)}
-            </div>
-        ),
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.net_profit)}</div>,
     },
     {
-        title: "Марж-ть",
-        render: (_, record) => (
-            <div>
-                {`${(((record.ppvz_for_pay -
-                    record.cost_price -
-                    record.retail_amount*0.07 -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost)
-                    /
-                    (record.ppvz_for_pay -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost))*100).toFixed(2)} %`}
-            </div>
-        ),
+        title: "Рентабельность",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.final_profit / record.cost_price_sum * 100)} %</div>,
     },
 ];
 
@@ -139,7 +116,7 @@ export const ReportsOfMonth = () => {
     ];
 
 
-    const dataForTable: ExtendedType[] = [];
+    const dataForTable: MonthReportType[] = [];
 
     for (let i = 1; i <= 12; i++) {
             const monthStr = i < 10 ? '0' + i : String(i);
@@ -152,12 +129,12 @@ export const ReportsOfMonth = () => {
             }
             
             if (reportsOfMonth) {
-                const report: ExtendedType = {
+                const report: MonthReportType = {
                     month: months[i-1],
                     year: reportsOfMonth[reportsOfMonth.length-1].date_to.slice(0, 4),
-                    retail_amount: reportsOfMonth?.reduce(
+                    sale: reportsOfMonth?.reduce(
                         (accumulator, currentObject) => {
-                            return accumulator + currentObject.retail_amount;
+                            return accumulator + currentObject.sale;
                         },
                         0
                     ),
@@ -167,15 +144,15 @@ export const ReportsOfMonth = () => {
                         },
                         0
                     ),
-                    cost_price: reportsOfMonth?.reduce(
+                    cost_price_sum: reportsOfMonth?.reduce(
                         (accumulator, currentObject) => {
-                            return accumulator + currentObject.cost_price;
+                            return accumulator + currentObject.cost_price_sum;
                         },
                         0
                     ),
-                    delivery_rub: reportsOfMonth?.reduce(
+                    delivery_sum: reportsOfMonth?.reduce(
                         (accumulator, currentObject) => {
-                            return accumulator + currentObject.delivery_rub;
+                            return accumulator + currentObject.delivery_sum;
                         },
                         0
                     ),
@@ -185,15 +162,33 @@ export const ReportsOfMonth = () => {
                         },
                         0
                     ),
-                    storage_cost: reportsOfMonth?.reduce(
+                    storage: reportsOfMonth?.reduce(
                         (accumulator, currentObject) => {
-                            return accumulator + currentObject.storage_cost;
+                            return accumulator + currentObject.storage;
                         },
                         0
                     ),
                     other_deductions: reportsOfMonth?.reduce(
                         (accumulator, currentObject) => {
                             return accumulator + currentObject.other_deductions;
+                        },
+                        0
+                    ),
+                    total_payment: reportsOfMonth?.reduce(
+                        (accumulator, currentObject) => {
+                            return accumulator + currentObject.total_payment;
+                        },
+                        0
+                    ),
+                    net_profit: reportsOfMonth?.reduce(
+                        (accumulator, currentObject) => {
+                            return accumulator + currentObject.net_profit;
+                        },
+                        0
+                    ),
+                    final_profit: reportsOfMonth?.reduce(
+                        (accumulator, currentObject) => {
+                            return accumulator + currentObject.final_profit;
                         },
                         0
                     ),
@@ -204,16 +199,19 @@ export const ReportsOfMonth = () => {
                         if (!report.composition.find(i => i.article === row.article)) {
                             report.composition.push({
                                 article: row.article,
-                                count: row.count,
+                                sale_count: row.sale_count,
                                 return_count: row.return_count,
-                                cost_price_of_one: row.cost_price_of_one,
-                                ppvz_for_pay_for_article: row.ppvz_for_pay_for_article
+                                cost_price: row.cost_price,
+                                sale_sum: row.sale_sum,
+                                retail_amount: row.retail_amount,
+                                return_sum: row.return_sum,
+                                delivery: row.delivery,
                             })
                         } else {
                             const compositionItemIndex = report.composition.findIndex(i => i.article === row.article);
-                            report.composition[compositionItemIndex].cost_price_of_one += row.cost_price_of_one;
-                            report.composition[compositionItemIndex].count += row.count;
-                            report.composition[compositionItemIndex].ppvz_for_pay_for_article += row.ppvz_for_pay_for_article;
+                            report.composition[compositionItemIndex].cost_price += row.cost_price;
+                            report.composition[compositionItemIndex].sale_count += row.sale_count;
+                            report.composition[compositionItemIndex].sale_sum += row.sale_sum;
                             report.composition[compositionItemIndex].return_count += row.return_count;
                         }
                     })
@@ -230,13 +228,6 @@ export const ReportsOfMonth = () => {
                 size="small"
                 columns={columns}
                 pagination={false}
-                // rowKey={(report) => report._id}
-                // onRow={(report) => {
-                //     return {
-                //         onClick: () =>
-                //             navigate(`${Paths.report}/${report._id}`),
-                //     };
-                // }}
             />
         </Card>
     );

@@ -50,6 +50,7 @@ export const BuyOperationForm: React.FC<Props<BuyOperation>> = ({
                                     <Select
                                         placeholder='Название компонента'
                                         disabled={ editForm }
+                                        style={{ minWidth: "200px" }}
                                     >
                                         {
                                             data?.map(component => ( <Select.Option value={ component._id } key={ component._id }>{component.name}</Select.Option> ))
@@ -61,7 +62,7 @@ export const BuyOperationForm: React.FC<Props<BuyOperation>> = ({
                                     name={[name, 'count']}
                                     rules={[{ required: true, message: 'Укажите количество' }]}
                                 >
-                                    <Input placeholder="Количество" type='number' />
+                                    <Input placeholder="Кол-во" type='number' />
                                 </Form.Item>
                                 <Form.Item
                                     {...restField}

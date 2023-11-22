@@ -1,5 +1,4 @@
 import { Card, Table } from "antd";
-import React from "react";
 import { CustomButton } from "../custom-button";
 import { useNavigate } from "react-router-dom";
 import { useGetAllReportsQuery } from "../../app/services/reports";
@@ -30,28 +29,34 @@ const columns: ColumnsType<Report> = [
         key: "date_to",
     },
     {
-        title: "Оборот",
-        dataIndex: "retail_amount",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.retail_amount)}</div>,
-        key: "retail_amount",
+        title: "Продажа",
+        dataIndex: "sale",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.sale)}</div>,
+        key: "sale",
     },
     {
         title: "Себестоимость",
-        dataIndex: "cost_price",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.cost_price)}</div>,
-        key: "cost_price",
+        dataIndex: "cost_price_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.cost_price_sum)}</div>,
+        key: "cost_price_sum",
+    },
+    {
+        title: "Комиссия",
+        dataIndex: "comission_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.comission_sum)}</div>,
+        key: "comission_sum",
     },
     {
         title: "Логистика",
-        dataIndex: "delivery_rub",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.delivery_rub)}</div>,
-        key: "delivery_rub",
+        dataIndex: "delivery_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.delivery_sum)}</div>,
+        key: "delivery_sum",
     },
     {
         title: "Хранение",
-        dataIndex: "storage_cost",
-        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.storage_cost)}</div>,
-        key: "storage_cost",
+        dataIndex: "storage",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.storage)}</div>,
+        key: "storage",
     },
     {
         title: "Удержания",
@@ -67,58 +72,33 @@ const columns: ColumnsType<Report> = [
     },
     {
         title: "К оплате",
+        dataIndex: "total_payment",
         render: (_, record) => (
-            <div>
-                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost)}
-            </div>
+            <div>{addSpacesToNumberWithDecimal(record.total_payment)}</div>
         ),
+        key: "total_payment",
+    },
+    {
+        title: "Налог",
+        dataIndex: "tax_sum",
+        render: (_, record) => <div>{addSpacesToNumberWithDecimal(record.tax_sum)}</div>,
+        key: "tax_sum",
     },
     {
         title: "Доход",
+        dataIndex: "net_profit",
         render: (_, record) => (
-            <div className={
-                record.ppvz_for_pay -
-                record.cost_price -
-                record.retail_amount*0.07 -
-                record.delivery_rub -
-                record.penalty -
-                record.other_deductions -
-                record.storage_cost < 0 ?
-                styles.bad : ''
-            }>
-                {addSpacesToNumberWithDecimal(record.ppvz_for_pay -
-                record.cost_price -
-                record.retail_amount*0.07 -
-                record.delivery_rub -
-                record.penalty -
-                record.other_deductions -
-                record.storage_cost)}
-            </div>
+            <div>{addSpacesToNumberWithDecimal(record.net_profit)}</div>
         ),
+        key: "net_profit",
     },
     {
-        title: "Марж-ть",
+        title: "Рентабельность",
+        dataIndex: "investment_return",
         render: (_, record) => (
-            <div>
-                {`${(((record.ppvz_for_pay -
-                    record.cost_price -
-                    record.retail_amount*0.07 -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost)
-                    /
-                    (record.ppvz_for_pay -
-                    record.delivery_rub -
-                    record.penalty -
-                    record.other_deductions -
-                    record.storage_cost))*100).toFixed(2)} %`}
-            </div>
+            <div>{addSpacesToNumberWithDecimal(record.final_profit / record.cost_price_sum * 100)} %</div>
         ),
+        key: "investment_return",
     },
 ];
 
@@ -142,6 +122,7 @@ export const Reports = () => {
                 loading={isLoading}
                 dataSource={data}
                 size="small"
+                scroll={{ x: 1300 }}
                 columns={columns}
                 rowKey={(report) => report._id}
                 onRow={(report) => {

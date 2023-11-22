@@ -9,8 +9,10 @@ import { EditReportForm } from "../../components/report-edit-form";
 import { Layout } from "../../components/layout";
 
 type DataFromForm = {
-    storage_cost: number,
-    other_deductions: number
+    storage: number,
+    taking_payment: number,
+    other_deductions: number,
+    business_costs: number,
 }
 
 export const EditReport = () => {

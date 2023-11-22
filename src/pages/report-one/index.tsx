@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../features/auth/authSlice';
@@ -11,15 +11,19 @@ import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useGetReportQuery, useRemoveReportMutation } from '../../app/services/reports';
 import { ColumnsType } from 'antd/es/table';
-import styles from './index.module.css';
 import { Layout } from '../../components/layout';
+import { addSpacesToNumberWithDecimal } from '../../utils/add-spaces-to-number';
+import styles from './index.module.css';
 
 const tableColumns: ColumnsType<{
     article: string,
-    count: number,
-    return_count: number,
-    cost_price_of_one: number,
-    ppvz_for_pay_for_article: number
+    cost_price: number, // Себестоимость единицы
+    retail_amount: number, // Продано ВБ
+    sale_count: number, // Кол-во продаж
+    return_count: number, // Кол-во возвратов
+    sale_sum: number, // Сумма продаж (ppvz_for_pay)
+    return_sum: number, // Сумма возвратов
+    delivery: number,
 }> = [
     {
         title: 'Артикул',
@@ -27,33 +31,43 @@ const tableColumns: ColumnsType<{
         key: 'article',
     },
     {
-        title: 'Кол-во',
-        dataIndex: 'count',
-        key: 'count',
+        title: 'Себестоимость ед.',
+        dataIndex: 'cost_price',
+        key: 'cost_price',
     },
     {
-        title: 'Возвраты',
+        title: 'Продажи, шт',
+        dataIndex: 'sale_count',
+        key: 'sale_count',
+    },
+    {
+        title: 'Возвраты, шт',
         dataIndex: 'return_count',
         key: 'return_count',
     },
     {
-        title: 'Цена за единицу',
-        dataIndex: 'cost_price_of_one',
-        key: 'cost_price_of_one',
+        title: 'Продажи, руб',
+        dataIndex: 'sale_sum',
+        render: (_, record) => addSpacesToNumberWithDecimal(record.sale_sum),
+        key: 'sale_sum',
     },
     {
-        title: 'Полная цена',
-        render: (_, record) => record.count*record.cost_price_of_one
+        title: 'Логистика',
+        dataIndex: 'delivery',
+        key: 'delivery',
     },
     {
-        title: 'К оплате за артикул',
-        dataIndex: 'ppvz_for_pay_for_article',
-        key: 'ppvz_for_pay_for_article',
+        title: 'Налог',
+        render: (_, record) => addSpacesToNumberWithDecimal(record.retail_amount * 0.07)
     },
     {
-        title: 'ROI, %',
-        render: (_, record) => <div>{(((record.ppvz_for_pay_for_article - record.count*record.cost_price_of_one))/(record.count*record.cost_price_of_one)*100).toFixed(2)} %</div>,
-    }
+        title: 'Доход',
+        render: (_, record) => addSpacesToNumberWithDecimal((record.sale_sum - record.return_sum) - (record.cost_price * record.sale_count) - record.delivery - (record.retail_amount * 0.07))
+    },
+    {
+        title: 'Доход на единицу',
+        render: (_, record) => addSpacesToNumberWithDecimal(((record.sale_sum - record.return_sum) - (record.cost_price * record.sale_count) - record.delivery - (record.retail_amount * 0.07)) / record.sale_count)
+    },
 ]
 
 export const ReportOne = () => {
@@ -113,54 +127,32 @@ export const ReportOne = () => {
                 <Descriptions.Item label='Дата конца' span={ 1 }>
                     { `${data.date_to}` }
                 </Descriptions.Item>
-                <Descriptions.Item label='Оборот' span={ 1 }>
-                    { `${data.retail_amount}` }
+                <Descriptions.Item label='Продажа' span={ 1 }>
+                    { `${addSpacesToNumberWithDecimal(data.sale)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Себестоимость' span={ 1 }>
-                    { `${data.cost_price}` }
+                    { `${addSpacesToNumberWithDecimal(data.cost_price_sum)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Логистика' span={ 1 }>
-                    { `${data.delivery_rub}` }
+                    { `${addSpacesToNumberWithDecimal(data.delivery_sum)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Хранение' span={ 1 }>
-                    { `${data.storage_cost}` }
+                    { `${addSpacesToNumberWithDecimal(data.storage)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Удержания' span={ 1 }>
-                    { `${data.other_deductions}` }
+                    { `${addSpacesToNumberWithDecimal(data.other_deductions)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Штрафы' span={ 3 }>
-                    { `${data.penalty}` }
+                    { `${addSpacesToNumberWithDecimal(data.penalty)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='К оплате' span={ 1 }>
-                    { `${(data.ppvz_for_pay -
-                        data.delivery_rub -
-                        data.penalty -
-                        data.other_deductions -
-                        data.storage_cost).toFixed(2)}` }
+                    { addSpacesToNumberWithDecimal(data.total_payment) }
                 </Descriptions.Item>
                 <Descriptions.Item label='Доход' span={ 1 }>
-                    { `${(data.ppvz_for_pay -
-                    data.cost_price -
-                    data.retail_amount*0.07 -
-                    data.delivery_rub -
-                    data.penalty -
-                    data.other_deductions -
-                    data.storage_cost).toFixed(2)}` }
+                    { addSpacesToNumberWithDecimal(data.net_profit) }
                 </Descriptions.Item>
-                <Descriptions.Item label='Маржинальность' span={ 1 }>
-                    { `${(((data.ppvz_for_pay -
-                        data.cost_price -
-                        data.retail_amount*0.07 -
-                        data.delivery_rub -
-                        data.penalty -
-                        data.other_deductions -
-                        data.storage_cost)
-                        /
-                        (data.ppvz_for_pay -
-                        data.delivery_rub -
-                        data.penalty -
-                        data.other_deductions -
-                        data.storage_cost))*100).toFixed(2)} %` }
+                <Descriptions.Item label='Рентабельность' span={ 1 }>
+                    { `${data.investment_return.toFixed(2)} %` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Состав' span={ 3 }>
                     <Table
@@ -169,6 +161,7 @@ export const ReportOne = () => {
                         columns={ tableColumns }
                         size="small"
                         pagination={ false }
+                        scroll={{ x: 1000 }}
                     />
                 </Descriptions.Item>
             </Descriptions>
