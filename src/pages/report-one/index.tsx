@@ -14,6 +14,7 @@ import { ColumnsType } from 'antd/es/table';
 import { Layout } from '../../components/layout';
 import { addSpacesToNumberWithDecimal } from '../../utils/add-spaces-to-number';
 import styles from './index.module.css';
+import { getDate } from '../../utils/get-date-format';
 
 const tableColumns: ColumnsType<{
     article: string,
@@ -122,10 +123,10 @@ export const ReportOne = () => {
                     { `${data.realizationreport_id}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Дата начала' span={ 1 }>
-                    { `${data.date_from}` }
+                    { `${getDate(data.date_from)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Дата конца' span={ 1 }>
-                    { `${data.date_to}` }
+                    { `${getDate(data.date_to)}` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Продажа' span={ 1 }>
                     { `${addSpacesToNumberWithDecimal(data.sale)}` }
@@ -152,7 +153,7 @@ export const ReportOne = () => {
                     { addSpacesToNumberWithDecimal(data.net_profit) }
                 </Descriptions.Item>
                 <Descriptions.Item label='Рентабельность' span={ 1 }>
-                    { `${data.investment_return.toFixed(2)} %` }
+                    { `${(data.final_profit / data.cost_price_sum * 100).toFixed(2)} %` }
                 </Descriptions.Item>
                 <Descriptions.Item label='Состав' span={ 3 }>
                     <Table
@@ -171,7 +172,7 @@ export const ReportOne = () => {
                         <Divider orientation='left'>Действия</Divider>
                         <Space>
                             <CustomButton type='dashed' icon={ <LeftOutlined /> } onClick={ () => navigate(-1)}>
-                                    Назад
+                                Назад
                             </CustomButton>
                             <Link to={`/report/edit/${data._id}`}>
                                 <CustomButton
