@@ -77,7 +77,7 @@ export const AddReport = () => {
                     </Form.Item>
                     <ErrorMessage message={ error } />
                     <Space>
-                        <CustomButton htmlType="submit" loading={btnLoading}>
+                        <CustomButton htmlType="submit" loading={btnLoading} disabled={dateFrom && dateTo ? false : true}>
                             Добавить
                         </CustomButton>
                         <CustomButton onClick={ () => navigate(-1)}>
