@@ -8,15 +8,14 @@ import { selectUser } from '../../features/auth/authSlice';
 import { Paths } from '../../paths';
 import { isErrorWithMessage } from '../../utils/is-error-with-message';
 import { useAddReportMutation } from '../../app/services/reports';
-import type { RangePickerProps } from 'antd/es/date-picker';
-import dayjs from "dayjs";
 import { Layout } from '../../components/layout';
 
 export const AddReport = () => {
     
     const [error, setError] = useState('');
     const [btnLoading, setBtnLoading] = useState(false);
-    const [selectedWeek, setSelectedWeek] = useState('');
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
     const navigate= useNavigate();
     const user = useSelector(selectUser);
     const [addReport] = useAddReportMutation();
@@ -26,28 +25,18 @@ export const AddReport = () => {
             navigate('/login');
         }
     }, [navigate, user]);
-    
-    const customWeekStartEndFormat: DatePickerProps['format'] = (value) => {
-        const startDate = dayjs(value).startOf('week').add(1, 'day');
-        const endDate = dayjs(value).endOf('week').add(1, 'day');
 
-        return `${startDate.format('YYYY-MM-DD')} ~ ${endDate.format('YYYY-MM-DD')}`;
+    const onChangeDateFrom: DatePickerProps['onChange'] = (date, dateString) => {
+        setDateFrom(dateString);
     };
-
-    const disabledDate: RangePickerProps['disabledDate'] = (current) => {
-        return current && current > dayjs().endOf('day').subtract(1, 'week');
-    };
-
-    const handleDateChange = (date: any, dateString: string) => {
-        setSelectedWeek(dateString);
+    const onChangeDateTo: DatePickerProps['onChange'] = (date, dateString) => {
+        setDateTo(dateString);
     };
 
     const handleAddReport = async () => {
         try {
             setBtnLoading(true);
 
-            const dateFrom = selectedWeek.slice(0, 10);
-            const dateTo = selectedWeek.slice(13);
             const tokenWB = localStorage.getItem('tokenWB');
 
             if (tokenWB) {
@@ -76,18 +65,19 @@ export const AddReport = () => {
         <Layout>
             <Card title='Запрос недельного отчета' style={{ width: '30rem', margin: '10px auto'}}>
                 <Form name="report-form" onFinish={ handleAddReport }>
-                    <Form.Item>
+                    <Form.Item label='Дата начала'>
                         <DatePicker
-                            format={customWeekStartEndFormat}
-                            onChange={handleDateChange}
-                            picker='week'
-                            placeholder='Неделя'
-                            disabledDate={disabledDate}
+                            onChange={onChangeDateFrom}
+                        />
+                    </Form.Item>
+                    <Form.Item label='Дата конца'>
+                        <DatePicker
+                            onChange={onChangeDateTo}
                         />
                     </Form.Item>
                     <ErrorMessage message={ error } />
                     <Space>
-                        <CustomButton htmlType="submit" loading={btnLoading} disabled={selectedWeek ? false : true}>
+                        <CustomButton htmlType="submit" loading={btnLoading}>
                             Добавить
                         </CustomButton>
                         <CustomButton onClick={ () => navigate(-1)}>
